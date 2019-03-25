@@ -7,21 +7,21 @@
 			<!-- On Android the card view plugin requires adding an external library
 				therefore it can't be demoed on Playground. You will have to download this project
 				and build it locally to try it on Android -->
-			<CardView *ngFor="let item of data" ripple="true" margin="6" elevation="40" radius="5">
+			<!-- <CardView *ngFor="let item of data" ripple="true" margin="6" elevation="40" radius="5">
 				<StackLayout  class="card-layout">
 					<Label class="h2" [text]="item.heading"></Label>
 					<Label class="body" textWrap="true" [text]="item.content"></Label>
 					
 				</StackLayout>
 				
-			</CardView>
-			<!-- <Card:CardView *ngFor="let item of data" class="cardStyle" margin="10" elevation="40" radius="5">
+			</CardView> -->
+			<Card:CardView *ngFor="let item of data" class="cardStyle" margin="10" elevation="40" radius="5">
 				<StackLayout class="card-layout">
 					<Label class="h2" [text]="item.heading"></Label>
 					<Label class="body" textWrap="true" [text]="item.content"></Label>
 					<button text="Aprobar" row="2" col="1" />
 				</StackLayout>
-			</Card:CardView> -->
+			</Card:CardView>
 		</StackLayout>
 	</ScrollView>
 </GridLayout>
