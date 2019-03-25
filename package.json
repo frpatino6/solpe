@@ -1,0 +1,46 @@
+{
+  "nativescript": {
+    "id": "org.nativescript.solpe",
+    "tns-android": {
+      "version": "5.2.1"
+    },
+    "tns-ios": {
+      "version": "5.2.0"
+    }
+  },
+  "description": "NativeScript Application",
+  "license": "SEE LICENSE IN <your-license-filename>",
+  "repository": "<fill-your-repository-here>",
+  "dependencies": {
+    "@angular/animations": "7.2.4",
+    "@angular/common": "7.2.4",
+    "@angular/compiler": "7.2.4",
+    "@angular/core": "7.2.4",
+    "@angular/forms": "7.2.4",
+    "@angular/http": "7.2.4",
+    "@angular/platform-browser": "7.2.4",
+    "@angular/platform-browser-dynamic": "7.2.4",
+    "@angular/router": "7.2.4",
+    "nativescript-angular": "~7.2.1",
+    "nativescript-plugin-firebase": "^8.0.1",
+    "nativescript-push-notifications": "^1.1.6",
+    "nativescript-theme-core": "~1.0.4",
+    "node-gcm": "^1.0.2",
+    "reflect-metadata": "~0.1.12",
+    "rxjs": "6.4.0",
+    "rxjs-compat": "6.4.0",
+    "tns-core-modules": "~5.2.0",
+    "zone.js": "~0.8.26"
+  },
+  "devDependencies": {
+    "@angular/compiler-cli": "~7.2.0",
+    "@nativescript/schematics": "~0.5.0",
+    "@ngtools/webpack": "~7.2.0",
+    "nativescript-dev-typescript": "~0.8.0",
+    "nativescript-dev-webpack": "~0.20.0",
+    "tns-platform-declarations": "5.2.0",
+    "typescript": "3.2.2"
+  },
+  "gitHead": "f548ec926e75201ab1b7c4a3a7ceefe7a4db15af",
+  "readme": "NativeScript Application"
+}

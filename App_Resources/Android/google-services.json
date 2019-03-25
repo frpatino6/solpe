@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "984049361003",
+    "firebase_url": "https://solpe-f1861.firebaseio.com",
+    "project_id": "solpe-f1861",
+    "storage_bucket": "solpe-f1861.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:984049361003:android:a185d80b36f63a1f",
+        "android_client_info": {
+          "package_name": "org.nativescript.solpe"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "984049361003-fs9rju0njlo6uaq63ulh7li2m0jrsdi1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCmzdcicXtLgkjDVG6GXVHYgwRBExO2u8A"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
