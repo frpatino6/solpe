@@ -1,6 +1,11 @@
 import { Component, OnInit } from "@angular/core";
 import firebase = require('nativescript-plugin-firebase')
 import * as pushPlugin from "nativescript-push-notifications";
+import { Page } from "tns-core-modules/ui/page/page";
+import { registerElement } from 'nativescript-angular/element-registry';
+import { CardView } from 'nativescript-cardview';
+registerElement('CardView', () => CardView);
+
 @Component({
     selector: "Home",
     moduleId: module.id,
@@ -25,7 +30,8 @@ export class HomeComponent implements OnInit {
             console.log("Message received!\n" + JSON.stringify(message));
         }
     };
-    constructor() {
+    constructor(private page: Page) {
+        this.page.actionBarHidden = true;
         firebase.init({
             persist: false,
             showNotificationsWhenInForeground: true,
@@ -80,7 +86,7 @@ export class HomeComponent implements OnInit {
         );
     }
 
-    onInitializaDataSolpe(){
+    onInitializaDataSolpe() {
         this.data.push({ heading: "Bulbasaur", content: "Bulbasaur can be seen napping in bright sunlight. There is a seed on its back. By soaking up the sun’s rays, the seed grows progressively larger." });
         this.data.push({ heading: "Ivysaur", content: "To support its weight, Ivysaur’s legs and trunk grow thick and strong. If it starts spending more time lying in the sunlight, it’s a sign that the bud will bloom into a large flower soon." });
         this.data.push({ heading: "Venusaur", content: "There is a large flower on Venusaur’s back. The flower is said to take on vivid colors if it gets plenty of nutrition and sunlight. The flower’s aroma soothes the emotions of people." });
