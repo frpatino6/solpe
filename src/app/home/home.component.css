@@ -9,3 +9,17 @@
 .card-layout .h1 {
     margin-bottom: 15;
 }
+.page {
+    background-color: rgb(237, 237, 237);
+}
+
+.cardStyle {
+    background-color: #fff;
+    color: rgb(43, 43, 43);
+}
+
+.cardContent {
+    padding: 20;
+    font-weight: bold;
+    font-size: 30;
+}
