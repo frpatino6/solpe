@@ -32,22 +32,6 @@ export class HomeComponent implements OnInit {
     };
     constructor(private page: Page) {
         this.page.actionBarHidden = true;
-        firebase.init({
-            persist: false,
-            showNotificationsWhenInForeground: true,
-            onMessageReceivedCallback: function (message) {
-                console.log("Title: " + message.title);
-                console.log("Body: " + message.body);
-                alert(message.body)
-            },
-            onPushTokenReceivedCallback: function (token) {
-                console.log("Firebase push token: " + token);
-            }
-        });
-        firebase.getCurrentPushToken().then((token: string) => {
-            // may be null if not known yet
-            console.log(`Current push token: ${token}`);
-        });
         this.onRegisterButtonTap();
     }
 

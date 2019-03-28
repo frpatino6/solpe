@@ -5,6 +5,7 @@ import { RouterExtensions } from "nativescript-angular/router";
 
 import { User } from "../shared/user.model";
 import { UserService } from "../shared/user.service";
+import firebase = require('nativescript-plugin-firebase')
 
 import { ActivatedRoute } from "@angular/router";
 @Component({
@@ -20,10 +21,11 @@ export class LoginComponent implements OnInit {
     ngOnInit(): void {
 
     }
-    
+
     isLoggingIn = true;
     user: User;
     processing = false;
+
     get message(): string {
         return this._message;
     }
@@ -34,22 +36,27 @@ export class LoginComponent implements OnInit {
             // this.notifyPropertyChange("message", value);
         }
     }
-    
+
 
     @ViewChild("password") password: ElementRef;
     @ViewChild("confirmPassword") confirmPassword: ElementRef;
 
-    constructor(private page: Page, private userService: UserService, 
+    constructor(private page: Page, private userService: UserService,
         private activeRoute: ActivatedRoute,
         private routerExtensions: RouterExtensions) {
         this.page.actionBarHidden = true;
         this.user = new User();
 
-        this.user.email="frpatino6@gmail.com";
-        this.user.password="1234546"
+
+        firebase.getCurrentPushToken().then((token: string) => {
+            // may be null if not known yet
+            console.log(`Current push token: ${token}`);
+        });
+        this.user.email = "frpatino6@gmail.com";
+        this.user.password = "1234546"
     }
     private updateMessage(text: String) {
-      
+
         this.message += text + "\n";
         alert(this.message);
     }
@@ -82,6 +89,8 @@ export class LoginComponent implements OnInit {
             alert("Unfortunately we could not find your account." + error.message);
             this.processing=false;
         });
+       
+
     }
 
     register() {

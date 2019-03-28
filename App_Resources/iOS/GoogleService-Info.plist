@@ -7,21 +7,21 @@
 	<key>AD_UNIT_ID_FOR_INTERSTITIAL_TEST</key>
 	<string>ca-app-pub-3940256099942544/4411468910</string>
 	<key>CLIENT_ID</key>
-	<string>984049361003-ev7cm13ih9jrnpjt05dkrh4m95uanqfj.apps.googleusercontent.com</string>
+	<string>994986165693-3q91g49qu55e12p9rpajtanvn1b6b82f.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.984049361003-ev7cm13ih9jrnpjt05dkrh4m95uanqfj</string>
+	<string>com.googleusercontent.apps.994986165693-3q91g49qu55e12p9rpajtanvn1b6b82f</string>
 	<key>API_KEY</key>
-	<string>AIzaSyCc3Ge9samXKr7NqtVepsY0m5GXLT_YaRY</string>
+	<string>AIzaSyBzwd8M95Czh-NX3DL8-Td8btICH9EHHew</string>
 	<key>GCM_SENDER_ID</key>
-	<string>984049361003</string>
+	<string>994986165693</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>org.nativescript.solpe</string>
+	<string>org.nativescript.solpercn</string>
 	<key>PROJECT_ID</key>
-	<string>solpe-f1861</string>
+	<string>rcnsolpe</string>
 	<key>STORAGE_BUCKET</key>
-	<string>solpe-f1861.appspot.com</string>
+	<string>rcnsolpe.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<true></true>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -33,8 +33,8 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:984049361003:ios:a185d80b36f63a1f</string>
+	<string>1:994986165693:ios:37defef1e89d9419</string>
 	<key>DATABASE_URL</key>
-	<string>https://solpe-f1861.firebaseio.com</string>
+	<string>https://rcnsolpe.firebaseio.com</string>
 </dict>
 </plist>
