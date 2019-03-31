@@ -17,6 +17,7 @@ import { ActivatedRoute } from "@angular/router";
 
 export class LoginComponent implements OnInit {
     private _message: string;
+    private _token: string;
 
     ngOnInit(): void {
 
@@ -51,6 +52,7 @@ export class LoginComponent implements OnInit {
         firebase.getCurrentPushToken().then((token: string) => {
             // may be null if not known yet
             console.log(`Current push token: ${token}`);
+            this._token=token;
         });
         this.user.email = "frpatino6@gmail.com";
         this.user.password = "1234546"
@@ -80,16 +82,18 @@ export class LoginComponent implements OnInit {
 
     login() {
         this.processing = true;
+        this.user.accessToken=this._token
+        
         this.userService.login(this.user)
-        .subscribe((result) => {
-            this.processing = false;
-            this.routerExtensions.navigate(["/home"],  { relativeTo: this.activeRoute });
-        }, (error) => {
-            console.log(error.message)
-            alert("Unfortunately we could not find your account." + error.message);
-            this.processing=false;
-        });
-       
+            .subscribe((result) => {
+                this.processing = false;
+                this.routerExtensions.navigate(["/home"], { relativeTo: this.activeRoute });
+            }, (error) => {
+                console.log(error.message)
+                alert("Unfortunately we could not find your account." + error.message);
+                this.processing = false;
+            });
+
 
     }
 
