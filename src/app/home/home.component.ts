@@ -6,6 +6,7 @@ import { registerElement } from 'nativescript-angular/element-registry';
 import { CardView } from 'nativescript-cardview';
 import { HomeService } from "../shared/home.service";
 import { Orders } from "../shared/models/Orders";
+import { ActivatedRoute } from "@angular/router";
 registerElement('CardView', () => CardView);
 
 @Component({
@@ -18,10 +19,16 @@ export class HomeComponent implements OnInit {
     public data: Orders[] = new Array();
     public processing = false;
     private _token: String;
+    private emailUser: String;
 
-    constructor(private page: Page, private homeServices: HomeService, private ref: ChangeDetectorRef) {
-        this.page.actionBarHidden = true;
+    constructor(private page: Page, private homeServices: HomeService, private route: ActivatedRoute,
+        private ref: ChangeDetectorRef) {
+        this.page.actionBarHidden = false;
         this.onRegisterButtonTap();
+
+        this.route.queryParams.subscribe(params => {
+            this.emailUser = params["email"];
+        });
 
     }
     private pushSettings = {
@@ -45,10 +52,10 @@ export class HomeComponent implements OnInit {
     ngOnInit(): void {
         firebase.addOnMessageReceivedCallback((message) => {
             console.log('addOnMessageReceivedCallback')
-            this.GetOrderByUser();                 
+            this.GetOrderByUser();
         }).then(
             (instance) => {
-                console.log("Mensaje recibido"  );
+                console.log("Mensaje recibido");
             },
             (error) => {
                 console.log("Error al recibir el mensaje: " + error);
@@ -61,7 +68,7 @@ export class HomeComponent implements OnInit {
     GetOrderByUser() {
         this.processing = true;
 
-        this.homeServices.getOrders("EAFANADOR")
+        this.homeServices.getOrders(this.emailUser)
             .subscribe((result) => {
                 this.processing = false;
                 this.data = result;
@@ -95,7 +102,7 @@ export class HomeComponent implements OnInit {
         let self = this;
         pushPlugin.register(this.pushSettings, (token: String) => {
             console.log("Device registered. Access token: " + token);
-            self._token=token;
+            self._token = token;
 
             if (pushPlugin.registerUserNotificationSettings) {
                 pushPlugin.registerUserNotificationSettings(() => {

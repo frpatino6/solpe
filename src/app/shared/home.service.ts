@@ -22,7 +22,7 @@ export class HomeService {
 
         this.onChange.emit(searchText);
       }
-    getOrders(user: string) : Observable<Orders[]>{
+    getOrders(user: String) : Observable<Orders[]>{
         let headers = this.createRequestHeader();
         return this.http.get<Orders[]>(this.serverUrl + '/solpe/GetOrdersByUserAsync/' + user, { headers: headers });
     }
