@@ -3,6 +3,7 @@ import { NativeScriptCommonModule } from "nativescript-angular/common";
 import { NativeScriptFormsModule } from "nativescript-angular/forms";
 import { HomeRoutingModule } from "./home-routing.module";
 import { HomeComponent } from "./home.component";
+import {HomeService} from '../shared/home.service'
 
 @NgModule({
     imports: [
@@ -14,6 +15,7 @@ import { HomeComponent } from "./home.component";
     declarations: [
         HomeComponent
     ],
+    providers:[HomeService],
     schemas: [
         NO_ERRORS_SCHEMA
     ]

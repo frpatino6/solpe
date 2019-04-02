@@ -7,6 +7,7 @@ import { NativeScriptFormsModule } from "nativescript-angular/forms";
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { LoginComponent } from "./login/login.component";
+import {HomeService} from './shared/home.service'
 
 import { UserService } from "./shared/user.service";
 
@@ -25,7 +26,7 @@ import { UserService } from "./shared/user.service";
         LoginComponent
     ],
     providers: [
-        UserService
+        UserService,HomeService
     ],
     schemas: [
         NO_ERRORS_SCHEMA

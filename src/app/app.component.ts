@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import firebase = require('nativescript-plugin-firebase')
+import { HomeService } from "./shared/home.service";
 
 @Component({
     moduleId: module.id,
@@ -10,21 +11,18 @@ export class AppComponent implements OnInit {
     ngOnInit(): void {
         
     }
-    constructor(){
+    constructor( private homeServices: HomeService){
+       var self= this;
         firebase.init({
             persist: true,            
             showNotificationsWhenInForeground: true,
-            onMessageReceivedCallback: function (message) {
-                console.log("Title: " + message.title);
-                console.log("Body: " + message.body);
-                alert(message.body)
-            },
+           
             onPushTokenReceivedCallback: function (token) {
                 console.log("Firebase push token: " + token);
             }
         }).then(
             (instance) => {
-                console.log("firebase.init done "  + instance);
+                console.log("firebase.init done "  );
             },
             (error) => {
                 console.log("firebase.init error: " + error);
