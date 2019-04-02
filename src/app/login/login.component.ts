@@ -2,7 +2,7 @@ import { Component, ElementRef, ViewChild, OnInit } from "@angular/core";
 import { alert, prompt } from "tns-core-modules/ui/dialogs";
 import { Page } from "tns-core-modules/ui/page";
 import { RouterExtensions } from "nativescript-angular/router";
-
+import * as pushPlugin from "nativescript-push-notifications";
 import { User } from "../shared/user.model";
 import { UserService } from "../shared/user.service";
 import firebase = require('nativescript-plugin-firebase')
@@ -17,15 +17,49 @@ import { ActivatedRoute } from "@angular/router";
 
 export class LoginComponent implements OnInit {
     private _message: string;
-    private _token: string;
+    private _token: String;
+    private isLoggingIn = true;
+    private user: User;
+    private processing = false;
+    @ViewChild("password") password: ElementRef;
+    @ViewChild("confirmPassword") confirmPassword: ElementRef;
 
+    constructor(private page: Page, private userService: UserService,
+        private activeRoute: ActivatedRoute,
+        private routerExtensions: RouterExtensions) {
+        this.page.actionBarHidden = true;
+        this.user = new User();
+        this.onRegisterButtonTap();
+
+        firebase.getCurrentPushToken().then((token: string) => {
+            // may be null if not known yet
+            console.log(`Current push token: ${token}`);
+            this._token=token;
+        });
+        this.user.email = "frpatino6@gmail.com";
+        this.user.password = "1234546"
+    }
+    private pushSettings = {
+        // Android settings
+        senderID: "984049361003", // Android: Required setting with the sender/project number
+        notificationCallbackAndroid: (stringifiedData: String, fcmNotification: any) => {
+            const notificationBody = fcmNotification && fcmNotification.getBody();
+            console.log("Message received!\n" + notificationBody + "\n" + stringifiedData);
+        },
+
+        // iOS settings
+        badge: true, // Enable setting badge through Push Notification
+        sound: true, // Enable playing a sound
+        alert: true, // Enable creating a alert
+        notificationCallbackIOS: (message: any) => {
+            console.log("Message received!\n" + JSON.stringify(message));
+
+        }
+    };
+    
     ngOnInit(): void {
 
     }
-
-    isLoggingIn = true;
-    user: User;
-    processing = false;
 
     get message(): string {
         return this._message;
@@ -37,26 +71,7 @@ export class LoginComponent implements OnInit {
             // this.notifyPropertyChange("message", value);
         }
     }
-
-
-    @ViewChild("password") password: ElementRef;
-    @ViewChild("confirmPassword") confirmPassword: ElementRef;
-
-    constructor(private page: Page, private userService: UserService,
-        private activeRoute: ActivatedRoute,
-        private routerExtensions: RouterExtensions) {
-        this.page.actionBarHidden = true;
-        this.user = new User();
-
-
-        firebase.getCurrentPushToken().then((token: string) => {
-            // may be null if not known yet
-            console.log(`Current push token: ${token}`);
-            this._token=token;
-        });
-        this.user.email = "frpatino6@gmail.com";
-        this.user.password = "1234546"
-    }
+    
     private updateMessage(text: String) {
 
         this.message += text + "\n";
@@ -65,7 +80,35 @@ export class LoginComponent implements OnInit {
     toggleForm() {
         this.isLoggingIn = !this.isLoggingIn;
     }
+    onRegisterButtonTap() {
+        let self = this;
+        pushPlugin.register(this.pushSettings, (token: String) => {
+            console.log("Device registered. Access token: " + token);
+            self._token=token;
 
+            if (pushPlugin.registerUserNotificationSettings) {
+                pushPlugin.registerUserNotificationSettings(() => {
+                    console.log("Successfully registered for interactive push.");
+                }, (err) => {
+                    console.log("Error registering for interactive push: " + JSON.stringify(err));
+                });
+            }
+        }, (errorMessage: String) => {
+            console.log(JSON.stringify(errorMessage));
+        });
+    }
+    onUnregisterButtonTap() {
+        let self = this;
+        pushPlugin.unregister(
+            (successMessage: String) => {
+                console.log(successMessage);
+            },
+            (errorMessage: String) => {
+                console.log(JSON.stringify(errorMessage));
+            },
+            this.pushSettings
+        );
+    }
     submit() {
         if (!this.user.email || !this.user.password) {
             this.message = "Please provide both an email address and password.";

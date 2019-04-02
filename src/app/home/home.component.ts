@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import firebase = require('nativescript-plugin-firebase')
-import * as pushPlugin from "nativescript-push-notifications";
+
 import { Page } from "tns-core-modules/ui/page/page";
 import { registerElement } from 'nativescript-angular/element-registry';
 import { CardView } from 'nativescript-cardview';
@@ -14,61 +14,18 @@ registerElement('CardView', () => CardView);
 })
 export class HomeComponent implements OnInit {
     data = [];
-    private pushSettings = {
-        // Android settings
-        senderID: "984049361003", // Android: Required setting with the sender/project number
-        notificationCallbackAndroid: (stringifiedData: String, fcmNotification: any) => {
-            const notificationBody = fcmNotification && fcmNotification.getBody();
-            console.log("Message received!\n" + notificationBody + "\n" + stringifiedData);
-        },
-
-        // iOS settings
-        badge: true, // Enable setting badge through Push Notification
-        sound: true, // Enable playing a sound
-        alert: true, // Enable creating a alert
-        notificationCallbackIOS: (message: any) => {
-            console.log("Message received!\n" + JSON.stringify(message));
-        }
-    };
+    
     constructor(private page: Page) {
         this.page.actionBarHidden = true;
-        this.onRegisterButtonTap();
+     
     }
 
     ngOnInit(): void {
         // Init your component properties here.
         this.onInitializaDataSolpe();
     }
-    onRegisterButtonTap() {
-        let self = this;
-        pushPlugin.register(this.pushSettings, (token: String) => {
-            console.log("Device registered. Access token: " + token);
-            // token displayed in console for easier copying and debugging durng development
-            console.log("Device registered. Access token: " + token);
-
-            if (pushPlugin.registerUserNotificationSettings) {
-                pushPlugin.registerUserNotificationSettings(() => {
-                    console.log("Successfully registered for interactive push.");
-                }, (err) => {
-                    console.log("Error registering for interactive push: " + JSON.stringify(err));
-                });
-            }
-        }, (errorMessage: String) => {
-            console.log(JSON.stringify(errorMessage));
-        });
-    }
-    onUnregisterButtonTap() {
-        let self = this;
-        pushPlugin.unregister(
-            (successMessage: String) => {
-                console.log(successMessage);
-            },
-            (errorMessage: String) => {
-                console.log(JSON.stringify(errorMessage));
-            },
-            this.pushSettings
-        );
-    }
+   
+  
 
     onInitializaDataSolpe() {
         this.data.push({ heading: "Bulbasaur", content: "Bulbasaur can be seen napping in bright sunlight. There is a seed on its back. By soaking up the sun’s rays, the seed grows progressively larger." });
