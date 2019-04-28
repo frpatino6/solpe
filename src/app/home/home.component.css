@@ -20,6 +20,10 @@
 .label{
     font-weight: bold;
 }
+.label-title{
+    font-weight: bold;
+    color: blue;
+}
 .cardContent {
     padding: 20;
     font-weight: bold;

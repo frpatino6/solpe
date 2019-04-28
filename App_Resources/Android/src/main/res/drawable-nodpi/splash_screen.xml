@@ -4,5 +4,6 @@
     </item>
     <item>
         <bitmap android:gravity="center" android:src="@drawable/logo" />
+         <bitmap android:gravity="center" android:src="@drawable/pedidos" />
     </item>
 </layer-list>

@@ -1,24 +1,69 @@
 <ActionBar title="Pedidos" class="action-bar">
 </ActionBar>
-
-<GridLayout xmlns:Card="nativescript-cardview">
-	<ScrollView class="page">
+<TabView id="tabViewContainer">
+	<StackLayout *tabItem="{title: 'Solicitud de pedidos', iconSource: 'res://icon'}">
 		<StackLayout>
-			<Card:CardView *ngFor="let item of data" class="cardStyle" margin="10" elevation="40" radius="5">
-				<StackLayout class="card-layout">
-					<Label class="h3" [text]="item.texto"></Label>
-					<GridLayout rows="*, *, *, *, *" columns="80, *" class="form">
-						<Label row="0" col="0" text="NÚMERO:" horizontalAlignment="left" class="label" />
-						<Label row="0" col="1" [text]="item.numero" class="body" />
-						<Label row="1" col="0" text="CANTIDAD:" horizontalAlignment="left" class="label" />
-						<Label row="1" col="1" [text]="item.cantidad" class="body" />
-						<Label row="2" col="0" text="VALOR:" horizontalAlignment="left" class="label" />
-						<Label row="2" col="1" [text]="item.valorLiteral" class="body" />
-					</GridLayout>
-					<button text="Aprobar" (tap)="onClick(item.numero)" row="2" col="1" class="btn btn-primary" />
-				</StackLayout>
-			</Card:CardView>
-			<ActivityIndicator rowSpan="3" [busy]="processing"></ActivityIndicator>
+			<GridLayout xmlns:Card="nativescript-cardview">
+				<ScrollView class="page">
+					<StackLayout>
+						<Card:CardView *ngFor="let item of dataSolpe" class="cardStyle" margin="10" elevation="40"
+							radius="5">
+							<StackLayout class="card-layout">
+								<Label class="h3 label-title" [text]="item.texto"></Label>
+								<GridLayout rows="*, *, *, *, *" columns="80, *" class="form">
+									<Label row="0" col="0" text="SOL.PEDIDO:" horizontalAlignment="left"
+										class="label" />
+									<Label row="0" col="1" [text]="item.numero" class="body" />
+									<Label row="1" col="0" text="CANTIDAD:" horizontalAlignment="left" class="label" />
+									<Label row="1" col="1" [text]="item.cantidad" class="body" />
+									<Label row="2" col="0" text="VALOR:" horizontalAlignment="left" class="label" />
+									<Label row="2" col="1" [text]="item.valorLiteral" class="body" />
+								</GridLayout>
+								<button text="Liberar" (tap)="onClick(item.numero)" row="2" col="1"
+									class="btn btn-primary" />
+							</StackLayout>
+						</Card:CardView>
+						<ActivityIndicator rowSpan="3" [busy]="processing"></ActivityIndicator>
+					</StackLayout>
+				</ScrollView>
+			</GridLayout>
 		</StackLayout>
-	</ScrollView>
-</GridLayout>
+	</StackLayout>
+	<StackLayout *tabItem="{title: 'Pedidos', iconSource: 'res://pedidos'}">
+		<StackLayout>
+			<StackLayout>
+				<GridLayout xmlns:Card="nativescript-cardview">
+					<ScrollView class="page">
+						<StackLayout>
+							<Card:CardView *ngFor="let item of dataPedidos" class="cardStyle" margin="10" elevation="40"
+								radius="5">
+								<StackLayout class="card-layout">
+									<Label class="h3 label-title" [text]="item.texto"></Label>
+									<GridLayout rows="*, *, *, *, *" columns="80, *" class="form">
+										<Label row="0" col="0" text="SOL.PEDIDO:" horizontalAlignment="left"
+											class="label" />
+										<Label row="0" col="1" [text]="item.numero" class="body" />
+										<Label row="1" col="0" text="CANTIDAD:" horizontalAlignment="left"
+											class="label" />
+										<Label row="1" col="1" [text]="item.cantidad" class="body" />
+										<Label row="2" col="0" text="VALOR:" horizontalAlignment="left" class="label" />
+										<Label row="2" col="1" [text]="item.valorLiteral" class="body" />
+									</GridLayout>
+									<GridLayout rows="*, *" columns="*, *" class="form">
+
+										<button row="0" col="0" text="Ver detalle"
+											(tap)="onClickDetailView(item.numero)" class="btn btn-primary" />
+										<button row="0" col="1" text="Liberar" (tap)="onClick(item.numero)"
+											class="btn btn-primary" />
+									</GridLayout>
+
+								</StackLayout>
+							</Card:CardView>
+							<ActivityIndicator rowSpan="3" [busy]="processing"></ActivityIndicator>
+						</StackLayout>
+					</ScrollView>
+				</GridLayout>
+			</StackLayout>
+		</StackLayout>
+	</StackLayout>
+</TabView>

@@ -1,0 +1,34 @@
+<ActionBar title="Pedidos" class="action-bar">
+</ActionBar>
+<TabView id="tabViewContainer">
+    <StackLayout *tabItem="{title: 'First Tab', iconSource: 'res://icon'}">
+        <StackLayout>
+            <GridLayout xmlns:Card="nativescript-cardview">
+				<ScrollView class="page">
+					<StackLayout>
+						<Card:CardView *ngFor="let item of data" class="cardStyle" margin="10" elevation="40" radius="5">
+							<StackLayout class="card-layout">
+								<Label class="h3" [text]="item.texto"></Label>
+								<GridLayout rows="*, *, *, *, *" columns="80, *" class="form">
+									<Label row="0" col="0" text="NÚMERO:" horizontalAlignment="left" class="label" />
+									<Label row="0" col="1" [text]="item.numero" class="body" />
+									<Label row="1" col="0" text="CANTIDAD:" horizontalAlignment="left" class="label" />
+									<Label row="1" col="1" [text]="item.cantidad" class="body" />
+									<Label row="2" col="0" text="VALOR:" horizontalAlignment="left" class="label" />
+									<Label row="2" col="1" [text]="item.valorLiteral" class="body" />
+								</GridLayout>
+								<button text="Aprobar" (tap)="onClick(item.numero)" row="2" col="1" class="btn btn-primary" />
+							</StackLayout>
+						</Card:CardView>
+						<ActivityIndicator rowSpan="3" [busy]="processing"></ActivityIndicator>
+					</StackLayout>
+				</ScrollView>
+			</GridLayout>
+        </StackLayout>
+    </StackLayout>
+    <StackLayout *tabItem="{title: 'Second Tab', iconSource: 'res://icon'}">
+        <StackLayout>
+            <Label text="Second Tab" textWrap="true" class="m-15 h2 text-left" color="blue"></Label>
+        </StackLayout>
+    </StackLayout>
+</TabView>

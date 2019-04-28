@@ -16,7 +16,8 @@ registerElement('CardView', () => CardView);
     templateUrl: "./home.component.html"
 })
 export class HomeComponent implements OnInit {
-    public data: Orders[] = new Array();
+    public dataSolpe: Orders[] = new Array();
+    public dataPedidos: Orders[] = new Array();
     public processing = false;
     private _token: String;
     private emailUser: String;
@@ -71,9 +72,10 @@ export class HomeComponent implements OnInit {
         this.homeServices.getOrders(this.emailUser)
             .subscribe((result) => {
                 this.processing = false;
-                this.data = result;
+                this.dataSolpe = result.filter(type => type.tipo_Doc == "S");
+                this.dataPedidos = result.filter(type => type.tipo_Doc != "S");
 
-                if (this.data.length == 0)
+                if (this.dataSolpe.length == 0 && this.dataPedidos.length==0)
                     alert("No tienen pendiente pedidos por aprobar")
                 console.log(" this.ref.detectChanges();  ");
                 this.ref.detectChanges();
