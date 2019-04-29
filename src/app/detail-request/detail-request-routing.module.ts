@@ -2,14 +2,14 @@ import { NgModule } from "@angular/core";
 import { Routes } from "@angular/router";
 import { NativeScriptRouterModule } from "nativescript-angular/router";
 
-import {  MainComponent} from "./main.component";
+import {DetailRequestComponent  } from "./detail-request.component";
 
 const routes: Routes = [
-    { path: "", component: MainComponent }
+    { path: "", component: DetailRequestComponent }
 ];
 
 @NgModule({
     imports: [NativeScriptRouterModule.forChild(routes)],
     exports: [NativeScriptRouterModule]
 })
-export class MainRoutingModule { }
+export class DetailRequestRoutingModule { }

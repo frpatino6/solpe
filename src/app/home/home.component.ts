@@ -7,6 +7,10 @@ import { CardView } from 'nativescript-cardview';
 import { HomeService } from "../shared/home.service";
 import { Orders } from "../shared/models/Orders";
 import { ActivatedRoute } from "@angular/router";
+import { RouterExtensions } from "nativescript-angular/router";
+import * as _ from 'lodash';
+
+
 registerElement('CardView', () => CardView);
 
 @Component({
@@ -18,13 +22,19 @@ registerElement('CardView', () => CardView);
 export class HomeComponent implements OnInit {
     public dataSolpe: Orders[] = new Array();
     public dataPedidos: Orders[] = new Array();
+    public dataGroupPedidos: Orders[] = new Array();
     public processing = false;
     private _token: String;
     private emailUser: String;
+    public TitleTabSolpe;
+    public TitleTabPedidos;
+    public totalSolpe = 0;
+    public totalPedidos = 0
 
-    constructor(private page: Page, private homeServices: HomeService, private route: ActivatedRoute,
+    constructor(private page: Page, private homeServices: HomeService,
+        private route: ActivatedRoute, private routerExtensions: RouterExtensions,
         private ref: ChangeDetectorRef) {
-        this.page.actionBarHidden = false;
+        this.page.actionBarHidden = true;
         this.onRegisterButtonTap();
 
         this.route.queryParams.subscribe(params => {
@@ -49,7 +59,12 @@ export class HomeComponent implements OnInit {
             this.GetOrderByUser();
         }
     };
-
+    setTitleTabSolpe() {
+        this.totalSolpe = this.dataSolpe.length;
+        this.totalPedidos = this.dataGroupPedidos.length;
+        this.TitleTabSolpe = { title: "Solicitud de pedidos " + this.totalSolpe, iconSource: "res://icon" };
+        this.TitleTabPedidos = { title: "Pedidos " + this.totalPedidos, iconSource: "res://pedidos" };
+    }
     ngOnInit(): void {
         firebase.addOnMessageReceivedCallback((message) => {
             console.log('addOnMessageReceivedCallback')
@@ -62,7 +77,7 @@ export class HomeComponent implements OnInit {
                 console.log("Error al recibir el mensaje: " + error);
             }
         );
-
+        this.setTitleTabSolpe();
         this.GetOrderByUser();
     }
 
@@ -72,12 +87,25 @@ export class HomeComponent implements OnInit {
         this.homeServices.getOrders(this.emailUser)
             .subscribe((result) => {
                 this.processing = false;
-                this.dataSolpe = result.filter(type => type.tipo_Doc == "S");
+                this.dataSolpe = result.filter(type => type.tipo_Doc == "S");    
                 this.dataPedidos = result.filter(type => type.tipo_Doc != "S");
+                this.dataGroupPedidos = _.chain(this.dataPedidos).groupBy("numero").map(function (v, i) {                   
+                    return {
+                      numero: i,
+                      id: _.get(_.find(v, 'numero'), 'numero'),
+                      cantidad: _.get(_.find(v, 'cantidad'), 'cantidad'),
+                      valorLiteral: _.get(_.find(v, 'valorLiteral'), 'valorLiteral'),
+                      tipo_Doc: _.get(_.find(v, 'tipo_Doc'), 'tipo_Doc'),
+                      texto: _.get(_.find(v, 'texto'), 'texto')
+                    };
+              
+                  }).value();
 
-                if (this.dataSolpe.length == 0 && this.dataPedidos.length==0)
+                if (this.dataSolpe.length == 0 && this.dataPedidos.length == 0)
                     alert("No tienen pendiente pedidos por aprobar")
-                console.log(" this.ref.detectChanges();  ");
+                else
+                    this.setTitleTabSolpe()
+
                 this.ref.detectChanges();
             }, (error) => {
                 console.log(error.message)
@@ -88,12 +116,10 @@ export class HomeComponent implements OnInit {
 
     onClick(number) {
         this.processing = true;
-
         this.homeServices.updateOrdersState(number)
             .subscribe((result) => {
                 this.processing = false;
-                this.GetOrderByUser();
-                console.log(result);
+                this.GetOrderByUser();            
             }, (error) => {
                 console.log(error.message)
                 alert("Unfortunately we could not find your account." + error.message);
@@ -116,5 +142,16 @@ export class HomeComponent implements OnInit {
         }, (errorMessage: String) => {
             console.log(JSON.stringify(errorMessage));
         });
+    }
+    onClickDetailView(numeroPedido) {
+        console.log(numeroPedido);
+        let navigationExtras = {
+            queryParams: { 
+                'pedidoDetails': JSON.stringify(this.dataPedidos.filter(e => e.numero == numeroPedido)) ,
+                'groupPedidoDetails': JSON.stringify(this.dataGroupPedidos.filter(e => e.numero == numeroPedido))
+            
+            }
+        }
+        this.routerExtensions.navigate(["/detail"], navigationExtras);
     }
 }

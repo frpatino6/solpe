@@ -8,7 +8,7 @@ const routes: Routes = [
     { path: "", redirectTo: BackendService.isUserLoggedIn() ? "/home" : "/login", pathMatch: "full" },
     { path: "login", component: LoginComponent },
     { path: "home", loadChildren: "./app/home/home.module#HomeModule" },
-    { path: "main", loadChildren: "./app/main/main.module#MainModule" }
+    { path: "detail", loadChildren: "./app/detail-request/detail-request.module#DetailRequestModule" },
 ];
 
 @NgModule({

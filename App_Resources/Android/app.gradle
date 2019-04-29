@@ -15,7 +15,7 @@ android {
     generatedDensities = []
          applicationId = "org.nativescript.solpercn"  
             multiDexEnabled true
-  }  
+  }    
   aaptOptions {  
     additionalParameters "--no-version-vectors"  
   }  

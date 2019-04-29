@@ -1,7 +1,7 @@
 <ActionBar title="Pedidos" class="action-bar">
 </ActionBar>
 <TabView id="tabViewContainer">
-	<StackLayout *tabItem="{title: 'Solicitud de pedidos', iconSource: 'res://icon'}">
+	<StackLayout *tabItem="TitleTabSolpe">
 		<StackLayout>
 			<GridLayout xmlns:Card="nativescript-cardview">
 				<ScrollView class="page">
@@ -29,13 +29,13 @@
 			</GridLayout>
 		</StackLayout>
 	</StackLayout>
-	<StackLayout *tabItem="{title: 'Pedidos', iconSource: 'res://pedidos'}">
+	<StackLayout *tabItem="TitleTabPedidos">
 		<StackLayout>
 			<StackLayout>
 				<GridLayout xmlns:Card="nativescript-cardview">
 					<ScrollView class="page">
 						<StackLayout>
-							<Card:CardView *ngFor="let item of dataPedidos" class="cardStyle" margin="10" elevation="40"
+							<Card:CardView *ngFor="let item of dataGroupPedidos" class="cardStyle" margin="10" elevation="40"
 								radius="5">
 								<StackLayout class="card-layout">
 									<Label class="h3 label-title" [text]="item.texto"></Label>
