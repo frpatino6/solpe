@@ -6,8 +6,9 @@ import * as pushPlugin from "nativescript-push-notifications";
 import { User } from "../shared/user.model";
 import { UserService } from "../shared/user.service";
 import firebase = require('nativescript-plugin-firebase')
-
 import { ActivatedRoute } from "@angular/router";
+require("nativescript-localstorage");
+
 @Component({
     selector: "app-login",
     moduleId: module.id,
@@ -130,6 +131,7 @@ export class LoginComponent implements OnInit {
         this.userService.login(this.user)
             .subscribe((result) => {
                 this.processing = false;
+                localStorage.setItem('emailUser', this.user.email);
                 let navigationExtras = {
                     queryParams: { 'email': this.user.email }
                   }

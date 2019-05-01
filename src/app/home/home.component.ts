@@ -11,6 +11,8 @@ import { RouterExtensions } from "nativescript-angular/router";
 import * as _ from 'lodash';
 import { CurrencyPipe } from "@angular/common";
 
+require("nativescript-localstorage");
+
 
 registerElement('CardView', () => CardView);
 
@@ -41,6 +43,7 @@ export class HomeComponent implements OnInit {
 
         this.route.queryParams.subscribe(params => {
             this.emailUser = params["email"];
+
         });
         var self = this;
 
@@ -53,7 +56,7 @@ export class HomeComponent implements OnInit {
         senderID: "984049361003", // Android: Required setting with the sender/project number
         notificationCallbackAndroid: (stringifiedData: String, fcmNotification: any) => {
             const notificationBody = fcmNotification && fcmNotification.getBody();
-           
+
         },
 
         // iOS settings
@@ -61,7 +64,7 @@ export class HomeComponent implements OnInit {
         sound: true, // Enable playing a sound
         alert: true, // Enable creating a alert
         notificationCallbackIOS: (message: any) => {
-            
+
             this.GetOrderByUser();
         }
     };
@@ -73,11 +76,11 @@ export class HomeComponent implements OnInit {
     }
     ngOnInit(): void {
         firebase.addOnMessageReceivedCallback((message) => {
-            
+
             this.GetOrderByUser();
         }).then(
             (instance) => {
-                
+
             },
             (error) => {
                 alert("Error al recibir el mensaje: " + error);
@@ -89,8 +92,8 @@ export class HomeComponent implements OnInit {
 
     GetOrderByUser() {
         this.processing = true;
-
-        this.homeServices.getOrders(this.emailUser)
+        var email = localStorage.getItem('emailUser')
+        this.homeServices.getOrders(email)
             .subscribe((result) => {
                 this.processing = false;
                 this.dataSolpe = result.filter(type => type.tipo_Doc == "S");
@@ -108,9 +111,9 @@ export class HomeComponent implements OnInit {
                 }).value();
 
                 if (this.dataSolpe.length == 0 && this.dataPedidos.length == 0)
-                    alert("No tienen pendiente pedidos por aprobar")
-                else
-                    this.setTitleTabSolpe()
+                    alert("No tienen pendiente pedidos por aprobar");
+                    
+                this.setTitleTabSolpe()
 
                 this.ref.detectChanges();
             }, (error) => {
@@ -126,7 +129,7 @@ export class HomeComponent implements OnInit {
                 this.processing = false;
                 this.GetOrderByUser();
             }, (error) => {
-                
+
                 alert("Unfortunately we could not find your account." + error.message);
                 this.processing = false;
             });
@@ -149,7 +152,7 @@ export class HomeComponent implements OnInit {
         });
     }
     onClickDetailView(numeroPedido) {
-        
+
         let navigationExtras = {
             queryParams: {
                 'pedidoDetails': JSON.stringify(this.dataPedidos.filter(e => e.numero == numeroPedido)),
@@ -162,7 +165,7 @@ export class HomeComponent implements OnInit {
     }
     getLineas(numeroPedido) {
         let numLineas: number = this.dataPedidos.filter(e => e.numero == numeroPedido).length;
-        
+
         return numLineas
     }
     getTotal(numeroPedido) {
