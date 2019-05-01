@@ -62,7 +62,7 @@ export class HomeComponent implements OnInit {
     setTitleTabSolpe() {
         this.totalSolpe = this.dataSolpe.length;
         this.totalPedidos = this.dataGroupPedidos.length;
-        this.TitleTabSolpe = { title: "Solicitud de pedidos " + this.totalSolpe, iconSource: "res://icon" };
+        this.TitleTabSolpe = { title: "Solicitud de pedidos " + this.totalSolpe, iconSource: "res://solpe" };
         this.TitleTabPedidos = { title: "Pedidos " + this.totalPedidos, iconSource: "res://pedidos" };
     }
     ngOnInit(): void {
