@@ -1,38 +1,43 @@
 <ActionBar class="action-bar" title="">
-    
+
     <NavigationButton text="Go Back" android.systemIcon="ic_menu_back" tap="onBack()"></NavigationButton>
 
 </ActionBar>
-
-<GridLayout rows="auto,auto" class="page page-content">
-    <StackLayout row="0" orientation="vertical">
-        <label text="Pedido N° {{numeroPedido}}" class="labelNumeroPedido"></label>
-        <ScrollView orientation="vertical">
+<ScrollView orientation="vertical">
+    <GridLayout rows="auto,auto," class="page page-content">
+        <StackLayout row="0" orientation="vertical">
+            <label text="Pedido N° {{numeroPedido}}" class="labelNumeroPedido" style="margin: 20px;"></label>
             <StackLayout class="">
-                <GridLayout columns="auto, *, auto, auto" rows="*" class="table table-standings">
-                    <Label text="L." textWrap="true" row="0" col="0" class="th #"></Label>
-                    <Label text="Texto" textWrap="true" row="0" col="1" class="th team"></Label>
-                    <Label text="Q" textWrap="true" row="0" col="2" class="th Z"></Label>
-                    <Label text="Valor" textWrap="true" row="0" col="3" class="th V"></Label>
+                <GridLayout rows="*, *, *" columns="*" class="form">
+                    <GridLayout row="" col="0" columns="auto, *, auto, auto" rows="*" class="table table-standings">
+                        <Label text="L." textWrap="true" row="0" col="0" class="th #"></Label>
+                        <Label text="Texto" textWrap="true" row="0" col="1" class="th team"></Label>
+                        <Label text="Q   " textWrap="true" row="0" col="2" class="th Z"></Label>
+                        <Label text="Valor" textWrap="true" row="0" col="3" class="th V"></Label>
+                    </GridLayout>
+                    <ListView row="1" col="0" [items]="dataPedidos" backgroundColor="transparent" height="500">
+                        <ng-template let-dataitem="item" let-i="index" let-third="third" let-header="header"
+                            let-footer="footer">
+                            <GridLayout columns="auto, *, auto, auto" rows="*" class="table table-standings">
+                                <Label [text]="dataitem.tipo_Doc" textWrap="true" row="0" col="0" class="td #"></Label>
+                                <Label [text]="dataitem.texto" textWrap="true" row="0" col="1" class="td team"></Label>
+                                <Label [text]="dataitem.cantidad" textWrap="true" row="0" col="2" class="td Z"></Label>
+                                <Label text="{{dataitem.valorLiteral}}" textWrap="true" row="0" col="3"
+                                    class="td V"></Label>
+                            </GridLayout>
+                        </ng-template>
+
+                    </ListView>
+                    <Label row="2" col="0" text="TOTAL PEDIDO: {{totalPedido}}" textWrap="true"
+                        class="labelNumeroPedido"></Label>
                 </GridLayout>
-                <ListView [items]="dataPedidos" backgroundColor="transparent" height="500">
-                    <ng-template let-dataitem="item" let-i="index" let-third="third" let-header="header"
-                        let-footer="footer">
-                        <GridLayout columns="auto, *, auto, auto" rows="*" class="table table-standings">
-                            <Label [text]="dataitem.tipo_Doc" textWrap="true" row="0" col="0" class="td #"></Label>
-                            <Label [text]="dataitem.texto" textWrap="true" row="0" col="1" class="td team"></Label>
-                            <Label [text]="dataitem.cantidad" textWrap="true" row="0" col="2" class="td Z"></Label>
-                            <Label text="{{dataitem.valorLiteral}}" textWrap="true" row="0" col="3"
-                                class="td Z"></Label>
-                        </GridLayout>
-                    </ng-template>
-                </ListView>
                 <GridLayout rows="*, *" columns="*, *" class="form">
-                    <button row="0" col="0" text="Regresar" (tap)="onBack()" class="btn btn-primary"></button>
-                    <button row="0" col="1" text="Liberar" (tap)="onClick()" class="btn btn-primary"></button>
+                    <button row="1" col="0" text="Regresar" (tap)="onBack()" class="btn btn-primary"></button>
+                    <button row="1" col="1" text="Liberar" (tap)="onClick()" class="btn btn-primary"></button>
                 </GridLayout>
             </StackLayout>
-        </ScrollView>
-    </StackLayout>
-    <ActivityIndicator rowSpan="2" [busy]="processing"></ActivityIndicator>
-</GridLayout>
+
+        </StackLayout>
+        <ActivityIndicator rowSpan="2" [busy]="processing"></ActivityIndicator>
+    </GridLayout>
+</ScrollView>

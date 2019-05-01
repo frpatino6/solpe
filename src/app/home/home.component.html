@@ -1,6 +1,8 @@
 <ActionBar title="Pedidos" class="action-bar">
 </ActionBar>
+
 <TabView id="tabViewContainer">
+	
 	<StackLayout *tabItem="TitleTabSolpe">
 		<StackLayout>
 			<GridLayout xmlns:Card="nativescript-cardview">
@@ -10,7 +12,7 @@
 							radius="5">
 							<StackLayout class="card-layout">
 								<Label class="h3 label-title" [text]="item.texto"></Label>
-								<GridLayout rows="*, *, *, *, *" columns="80, *" class="form">
+								<GridLayout rows="*, *, *, *, *" columns="*, *" class="form">
 									<Label row="0" col="0" text="SOL.PEDIDO:" horizontalAlignment="left"
 										class="label" />
 									<Label row="0" col="1" [text]="item.numero" class="body" />
@@ -23,9 +25,10 @@
 									class="btn btn-primary" />
 							</StackLayout>
 						</Card:CardView>
-						<ActivityIndicator rowSpan="3" [busy]="processing"></ActivityIndicator>
+
 					</StackLayout>
 				</ScrollView>
+				<ActivityIndicator rowSpan="3" [busy]="processing"></ActivityIndicator>
 			</GridLayout>
 		</StackLayout>
 	</StackLayout>
@@ -35,22 +38,22 @@
 				<GridLayout xmlns:Card="nativescript-cardview">
 					<ScrollView class="page">
 						<StackLayout>
-							<Card:CardView *ngFor="let item of dataGroupPedidos" class="cardStyle" margin="10" elevation="40"
-								radius="5">
+							<Card:CardView *ngFor="let item of dataGroupPedidos" class="cardStyle" margin="10"
+								elevation="40" radius="5">
 								<StackLayout class="card-layout">
 									<Label class="h3 label-title" [text]="item.texto"></Label>
-									<GridLayout rows="*, *, *, *, *" columns="80, *" class="form">
-										<Label row="0" col="0" text="SOL.PEDIDO:" horizontalAlignment="left"
+									<GridLayout rows="*, *, *, *, *" columns="*, *" class="form">
+										<Label row="0" col="0" text="PEDIDO #:" horizontalAlignment="left"
 											class="label" />
 										<Label row="0" col="1" [text]="item.numero" class="body" />
-										<Label row="1" col="0" text="CANTIDAD:" horizontalAlignment="left"
+										<Label row="1" col="0" text="LINEAS:" horizontalAlignment="left"
 											class="label" />
-										<Label row="1" col="1" [text]="item.cantidad" class="body" />
-										<Label row="2" col="0" text="VALOR:" horizontalAlignment="left" class="label" />
-										<Label row="2" col="1" [text]="item.valorLiteral" class="body" />
+										<Label row="1" col="1" [text]="getLineas(item.numero)" class="body" />
+										<Label row="2" col="0" text="VALOR TOTAL:" horizontalAlignment="left"
+											class="label" />
+										<Label row="2" col="1" [text]="getTotal(item.numero)" class="body" />
 									</GridLayout>
 									<GridLayout rows="*, *" columns="*, *" class="form">
-
 										<button row="0" col="0" text="Ver detalle"
 											(tap)="onClickDetailView(item.numero)" class="btn btn-primary" />
 										<button row="0" col="1" text="Liberar" (tap)="onClick(item.numero)"
@@ -59,9 +62,10 @@
 
 								</StackLayout>
 							</Card:CardView>
-							<ActivityIndicator rowSpan="3" [busy]="processing"></ActivityIndicator>
+
 						</StackLayout>
 					</ScrollView>
+					<ActivityIndicator rowSpan="3" [busy]="processing"></ActivityIndicator>
 				</GridLayout>
 			</StackLayout>
 		</StackLayout>
