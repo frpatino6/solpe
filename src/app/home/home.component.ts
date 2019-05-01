@@ -6,9 +6,10 @@ import { registerElement } from 'nativescript-angular/element-registry';
 import { CardView } from 'nativescript-cardview';
 import { HomeService } from "../shared/home.service";
 import { Orders } from "../shared/models/Orders";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router, NavigationEnd } from "@angular/router";
 import { RouterExtensions } from "nativescript-angular/router";
 import * as _ from 'lodash';
+import { CurrencyPipe } from "@angular/common";
 
 
 registerElement('CardView', () => CardView);
@@ -31,7 +32,8 @@ export class HomeComponent implements OnInit {
     public totalSolpe = 0;
     public totalPedidos = 0
 
-    constructor(private page: Page, private homeServices: HomeService,
+    constructor(private page: Page, private homeServices: HomeService, private router: Router,
+        private currencyPipe: CurrencyPipe,
         private route: ActivatedRoute, private routerExtensions: RouterExtensions,
         private ref: ChangeDetectorRef) {
         this.page.actionBarHidden = true;
@@ -40,14 +42,18 @@ export class HomeComponent implements OnInit {
         this.route.queryParams.subscribe(params => {
             this.emailUser = params["email"];
         });
+        var self = this;
 
+        this.page.on(Page.navigatingToEvent, function () {
+            self.GetOrderByUser();
+        })
     }
     private pushSettings = {
         // Android settings
         senderID: "984049361003", // Android: Required setting with the sender/project number
         notificationCallbackAndroid: (stringifiedData: String, fcmNotification: any) => {
             const notificationBody = fcmNotification && fcmNotification.getBody();
-            console.log("Message received!\n" + notificationBody + "\n" + stringifiedData);
+           
         },
 
         // iOS settings
@@ -55,7 +61,7 @@ export class HomeComponent implements OnInit {
         sound: true, // Enable playing a sound
         alert: true, // Enable creating a alert
         notificationCallbackIOS: (message: any) => {
-            console.log("Message received!\n" + JSON.stringify(message));
+            
             this.GetOrderByUser();
         }
     };
@@ -67,18 +73,18 @@ export class HomeComponent implements OnInit {
     }
     ngOnInit(): void {
         firebase.addOnMessageReceivedCallback((message) => {
-            console.log('addOnMessageReceivedCallback')
+            
             this.GetOrderByUser();
         }).then(
             (instance) => {
-                console.log("Mensaje recibido");
+                
             },
             (error) => {
-                console.log("Error al recibir el mensaje: " + error);
+                alert("Error al recibir el mensaje: " + error);
             }
         );
         this.setTitleTabSolpe();
-        this.GetOrderByUser();
+
     }
 
     GetOrderByUser() {
@@ -87,19 +93,19 @@ export class HomeComponent implements OnInit {
         this.homeServices.getOrders(this.emailUser)
             .subscribe((result) => {
                 this.processing = false;
-                this.dataSolpe = result.filter(type => type.tipo_Doc == "S");    
+                this.dataSolpe = result.filter(type => type.tipo_Doc == "S");
                 this.dataPedidos = result.filter(type => type.tipo_Doc != "S");
-                this.dataGroupPedidos = _.chain(this.dataPedidos).groupBy("numero").map(function (v, i) {                   
+                this.dataGroupPedidos = _.chain(this.dataPedidos).groupBy("numero").map(function (v, i) {
                     return {
-                      numero: i,
-                      id: _.get(_.find(v, 'numero'), 'numero'),
-                      cantidad: _.get(_.find(v, 'cantidad'), 'cantidad'),
-                      valorLiteral: _.get(_.find(v, 'valorLiteral'), 'valorLiteral'),
-                      tipo_Doc: _.get(_.find(v, 'tipo_Doc'), 'tipo_Doc'),
-                      texto: _.get(_.find(v, 'texto'), 'texto')
+                        numero: i,
+                        id: _.get(_.find(v, 'numero'), 'numero'),
+                        cantidad: _.get(_.find(v, 'cantidad'), 'cantidad'),
+                        valorLiteral: _.get(_.find(v, 'valorLiteral'), 'valorLiteral'),
+                        tipo_Doc: _.get(_.find(v, 'tipo_Doc'), 'tipo_Doc'),
+                        texto: _.get(_.find(v, 'texto'), 'texto')
                     };
-              
-                  }).value();
+
+                }).value();
 
                 if (this.dataSolpe.length == 0 && this.dataPedidos.length == 0)
                     alert("No tienen pendiente pedidos por aprobar")
@@ -108,7 +114,6 @@ export class HomeComponent implements OnInit {
 
                 this.ref.detectChanges();
             }, (error) => {
-                console.log(error.message)
                 alert("Unfortunately we could not find your account." + error.message);
                 this.processing = false;
             });
@@ -119,9 +124,9 @@ export class HomeComponent implements OnInit {
         this.homeServices.updateOrdersState(number)
             .subscribe((result) => {
                 this.processing = false;
-                this.GetOrderByUser();            
+                this.GetOrderByUser();
             }, (error) => {
-                console.log(error.message)
+                
                 alert("Unfortunately we could not find your account." + error.message);
                 this.processing = false;
             });
@@ -129,12 +134,12 @@ export class HomeComponent implements OnInit {
     onRegisterButtonTap() {
         let self = this;
         pushPlugin.register(this.pushSettings, (token: String) => {
-            console.log("Device registered. Access token: " + token);
+            // console.log("Device registered. Access token: " + token);
             self._token = token;
 
             if (pushPlugin.registerUserNotificationSettings) {
                 pushPlugin.registerUserNotificationSettings(() => {
-                    console.log("Successfully registered for interactive push.");
+                    // console.log("Successfully registered for interactive push.");
                 }, (err) => {
                     console.log("Error registering for interactive push: " + JSON.stringify(err));
                 });
@@ -144,14 +149,27 @@ export class HomeComponent implements OnInit {
         });
     }
     onClickDetailView(numeroPedido) {
-        console.log(numeroPedido);
+        
         let navigationExtras = {
-            queryParams: { 
-                'pedidoDetails': JSON.stringify(this.dataPedidos.filter(e => e.numero == numeroPedido)) ,
-                'groupPedidoDetails': JSON.stringify(this.dataGroupPedidos.filter(e => e.numero == numeroPedido))
-            
+            queryParams: {
+                'pedidoDetails': JSON.stringify(this.dataPedidos.filter(e => e.numero == numeroPedido)),
+                'groupPedidoDetails': JSON.stringify(this.dataGroupPedidos.filter(e => e.numero == numeroPedido)),
+                'totalPedido': this.getTotal(numeroPedido)
+
             }
         }
         this.routerExtensions.navigate(["/detail"], navigationExtras);
+    }
+    getLineas(numeroPedido) {
+        let numLineas: number = this.dataPedidos.filter(e => e.numero == numeroPedido).length;
+        
+        return numLineas
+    }
+    getTotal(numeroPedido) {
+        var result = 0;
+        this.dataPedidos.filter(e => e.numero == numeroPedido).forEach(element => {
+            result += element.valor;
+        });
+        return this.currencyPipe.transform(result);
     }
 }

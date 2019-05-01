@@ -18,14 +18,14 @@ export class AppComponent implements OnInit {
             showNotificationsWhenInForeground: true,
            
             onPushTokenReceivedCallback: function (token) {
-                console.log("Firebase push token: " + token);
+                //console.log("Firebase push token: " + token);
             }
         }).then(
             (instance) => {
-                console.log("firebase.init done "  );
+                //console.log("firebase.init done "  );
             },
             (error) => {
-                console.log("firebase.init error: " + error);
+                //console.log("firebase.init error: " + error);
             }
         );
         

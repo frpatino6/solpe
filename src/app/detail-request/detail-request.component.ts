@@ -5,6 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { SetupItemViewArgs } from "nativescript-angular/directives";
 import { HomeService } from '../shared/home.service';
 import { RouterExtensions } from 'nativescript-angular/router';
+import { CurrencyPipe } from '@angular/common';
 
 @Component({
   moduleId: module.id,
@@ -18,7 +19,9 @@ export class DetailRequestComponent implements OnInit {
   public dataGroupPedidos: Orders[] = new Array();
   public processing = false;
   public numeroPedido = ""
+  public totalPedido=0;
   constructor(
+    private currencyPipe: CurrencyPipe,
     private router: RouterExtensions,
     private page: Page,
     private route: ActivatedRoute,
@@ -29,7 +32,8 @@ export class DetailRequestComponent implements OnInit {
     this.route.queryParams.subscribe(params => {
       self.dataPedidos = JSON.parse(params["pedidoDetails"]);
       self.dataGroupPedidos = JSON.parse(params["groupPedidoDetails"]);
-      
+      self.totalPedido=params["totalPedido"];
+
       if (self.dataPedidos.length > 0)
         self.numeroPedido = self.dataPedidos[0].numero;
 
@@ -44,21 +48,21 @@ export class DetailRequestComponent implements OnInit {
   ngOnInit() {
 
   }
-   onClick() {
-        this.processing = true;
+  onClick() {
+    this.processing = true;
 
-        this.homeServices.updateOrdersState(this.numeroPedido)
-            .subscribe((result) => {
-                this.processing = false;
-                this.router.back();                
-            }, (error) => {
-                console.log(error.message)
-                alert("Unfortunately we could not find your account." + error.message);
-                this.processing = false;
-            });
-    }
-    onBack(){
-      this.router.back();
-    }
+    this.homeServices.updateOrdersState(this.numeroPedido)
+      .subscribe((result) => {
+        this.processing = false;
+        this.router.back();
+      }, (error) => {
+
+        alert("Unfortunately we could not find your account." + error.message);
+        this.processing = false;
+      });
+  }
+  onBack() {
+    this.router.back();
+  }
 
 }

@@ -4,6 +4,7 @@ import { NativeScriptFormsModule } from "nativescript-angular/forms";
 import { DetailRequestRoutingModule } from "./detail-request-routing.module";
 import { DetailRequestComponent } from "./detail-request.component";
 import {HomeService} from '../shared/home.service'
+import { CurrencyPipe } from "@angular/common";
 
 @NgModule({
     imports: [
@@ -17,7 +18,7 @@ import {HomeService} from '../shared/home.service'
     declarations: [
         DetailRequestComponent
     ],
-    providers:[HomeService],
+    providers:[HomeService,CurrencyPipe],
     schemas: [
         NO_ERRORS_SCHEMA
     ]

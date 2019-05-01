@@ -10,7 +10,7 @@
 							radius="5">
 							<StackLayout class="card-layout">
 								<Label class="h3 label-title" [text]="item.texto"></Label>
-								<GridLayout rows="*, *, *, *, *" columns="80, *" class="form">
+								<GridLayout rows="*, *, *, *, *" columns="*, *" class="form">
 									<Label row="0" col="0" text="SOL.PEDIDO:" horizontalAlignment="left"
 										class="label" />
 									<Label row="0" col="1" [text]="item.numero" class="body" />
@@ -39,15 +39,13 @@
 								radius="5">
 								<StackLayout class="card-layout">
 									<Label class="h3 label-title" [text]="item.texto"></Label>
-									<GridLayout rows="*, *, *, *, *" columns="80, *" class="form">
-										<Label row="0" col="0" text="SOL.PEDIDO:" horizontalAlignment="left"
-											class="label" />
-										<Label row="0" col="1" [text]="item.numero" class="body" />
-										<Label row="1" col="0" text="CANTIDAD:" horizontalAlignment="left"
-											class="label" />
-										<Label row="1" col="1" [text]="item.cantidad" class="body" />
-										<Label row="2" col="0" text="VALOR:" horizontalAlignment="left" class="label" />
-										<Label row="2" col="1" [text]="item.valorLiteral" class="body" />
+									<GridLayout rows="*, *, *, *, *" columns="*, *" class="form">
+										<Label row="0" col="0" text="PEDIDO #:" horizontalAlignment="left" class="label" />
+										<Label row="0" col="1" [text]="item.numero" class="body"/>
+										<Label row="1" col="0" text="LINEAS:" horizontalAlignment="left" class="label"/>
+										<Label row="1" col="1" [text]="getLineas(item.numero)" class="body" />
+										<Label row="2" col="0" text="VALOR TOTAL:" horizontalAlignment="left" class="label" />
+										<Label row="2" col="1" [text]="getTotal(item.numero)" class="body" />
 									</GridLayout>
 									<GridLayout rows="*, *" columns="*, *" class="form">
 
