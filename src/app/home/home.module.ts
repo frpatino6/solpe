@@ -5,10 +5,11 @@ import { HomeRoutingModule } from "./home-routing.module";
 import { HomeComponent } from "./home.component";
 import {HomeService} from '../shared/home.service'
 import { CurrencyPipe } from "@angular/common";
+import { NativescriptBottomNavigationModule} from "nativescript-bottom-navigation/angular";
 
 @NgModule({
     imports: [
-       
+        NativescriptBottomNavigationModule,
         NativeScriptCommonModule,
         HomeRoutingModule,
         NativeScriptFormsModule

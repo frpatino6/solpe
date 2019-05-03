@@ -153,6 +153,7 @@ export class HomeComponent implements OnInit {
     }
     onClickDetailView(numeroPedido) {
 
+        this.processing=true;
         let navigationExtras = {
             queryParams: {
                 'pedidoDetails': JSON.stringify(this.dataPedidos.filter(e => e.numero == numeroPedido)),
