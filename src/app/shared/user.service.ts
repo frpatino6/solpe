@@ -2,6 +2,7 @@
 // Feel free to swap in your own service / APIs / etc here for your own apps.
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+
 // import { Kinvey } from "kinvey-nativescript-sdk";
 import { User } from "./user.model";
 
@@ -9,16 +10,16 @@ import { User } from "./user.model";
 export class UserService {
     constructor(private http: HttpClient) { }
 
-    private serverUrl = "http://192.168.0.3/solpe/login/ValidateUser/fernando/$S4ntiago12345";
+    private serverUrl = "http://172.20.0.154:8081/login/ValidateUser/";
     register(user: User) {
         // return Kinvey.User.signup({ username: user.email, password: user.password })
         //     .catch(this.handleErrors);
     }
 
     login(user: User) {
-        let headers = this.createRequestHeader();
+        let header = this.createRequestHeader();
         console.log(this.serverUrl+ user.email +'/' + user.password)
-        return this.http.get(this.serverUrl);
+        return this.http.get(this.serverUrl+ user.email +'/' + user.password , { headers: header });
     }
 
     logout() {
