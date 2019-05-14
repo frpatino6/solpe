@@ -10,7 +10,8 @@ import { User } from "./user.model";
 export class UserService {
     constructor(private http: HttpClient) { }
 
-    private serverUrl = "http://172.20.0.154:8081/login/ValidateUser/";
+    // private serverUrl = "http://172.20.0.154:8081/login/ValidateUser/";
+    private serverUrl = "http://192.168.0.3/solpe/login/ValidateUser/";
     register(user: User) {
         // return Kinvey.User.signup({ username: user.email, password: user.password })
         //     .catch(this.handleErrors);

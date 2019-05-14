@@ -16,7 +16,8 @@ export class HomeService {
         
     }
 
-    private serverUrl = "https://solpeservices.azurewebsites.net/";
+    private serverUrl = "http://192.168.0.3/solpeoracle/solpe/GetLiberaSolpes/";
+    private serverDatabaseUrl="http://192.168.0.3/solpeoracle/solpe/UpdateOrderState/"
 
     changesearchTaskCriteriak(searchText: string) {
 
@@ -24,11 +25,11 @@ export class HomeService {
       }
     getOrders(user: String) : Observable<Orders[]>{
         let headers = this.createRequestHeader();
-        return this.http.get<Orders[]>(this.serverUrl + '/solpe/GetOrdersByUserAsync/' + user, { headers: headers });
+        return this.http.get<Orders[]>(this.serverUrl  + user, { headers: headers });
     }
     updateOrdersState(number: string) : Observable<Orders>{
         let headers = this.createRequestHeader();
-        return this.http.put<Orders>(this.serverUrl + '/solpe/UpdateOrderState/' + number, { headers: headers });
+        return this.http.post<Orders>(this.serverDatabaseUrl  + number, { headers: headers });
     }
 
 

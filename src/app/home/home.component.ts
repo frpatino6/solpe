@@ -91,14 +91,15 @@ export class HomeComponent implements OnInit {
     }
 
     GetOrderByUser() {
+        var self= this;
         this.processing = true;
         var email = localStorage.getItem('emailUser')
         this.homeServices.getOrders(email)
             .subscribe((result) => {
                 this.processing = false;
-                this.dataSolpe = result.filter(type => type.tipo_Doc == "S");
-                this.dataPedidos = result.filter(type => type.tipo_Doc != "S");
-                this.dataGroupPedidos = _.chain(this.dataPedidos).groupBy("numero").map(function (v, i) {
+                self.dataSolpe = result.filter(type => type.tipo_Doc == "S");
+                self.dataPedidos = result.filter(type => type.tipo_Doc != "S");
+                self.dataGroupPedidos = _.chain(self.dataPedidos).groupBy("numero").map(function (v, i) {
                     return {
                         numero: i,
                         id: _.get(_.find(v, 'numero'), 'numero'),

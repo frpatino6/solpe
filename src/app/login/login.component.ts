@@ -37,8 +37,8 @@ export class LoginComponent implements OnInit {
             console.log(`Current push token: ${token}`);
             this._token=token;
         });
-        this.user.email = "";
-        this.user.password = ""
+        this.user.email = "fernando";
+        this.user.password = "$S4ntiago12345"
     }
     private pushSettings = {
         // Android settings
