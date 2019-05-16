@@ -37,8 +37,8 @@ export class LoginComponent implements OnInit {
             console.log(`Current push token: ${token}`);
             this._token=token;
         });
-        this.user.email = "fernando";
-        this.user.password = "$S4ntiago12345"
+        this.user.email = "iisadminqa";
+        this.user.password = "c0l@b0r@c10n"
     }
     private pushSettings = {
         // Android settings
@@ -137,9 +137,10 @@ export class LoginComponent implements OnInit {
                   }
                 this.routerExtensions.navigate(["/home"],  navigationExtras);
             }, (error) => {
-                console.log(error.message)
-                alert("Unfortunately we could not find your account." + error.message);
+                console.log(error.error)
+                alert(error.error);
                 this.processing = false;
+                
             });
 
 

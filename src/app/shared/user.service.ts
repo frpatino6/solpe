@@ -10,8 +10,8 @@ import { User } from "./user.model";
 export class UserService {
     constructor(private http: HttpClient) { }
 
-    // private serverUrl = "http://172.20.0.154:8081/login/ValidateUser/";
-    private serverUrl = "http://192.168.0.3/solpe/login/ValidateUser/";
+     //private serverUrl = "http://192.168.0.4/solpe/login/ValidateUser/";
+    private serverUrl = "http://172.20.0.154:8081/login/ValidateUser/";
     register(user: User) {
         // return Kinvey.User.signup({ username: user.email, password: user.password })
         //     .catch(this.handleErrors);
@@ -19,8 +19,8 @@ export class UserService {
 
     login(user: User) {
         let header = this.createRequestHeader();
-        console.log(this.serverUrl+ user.email +'/' + user.password)
-        return this.http.get(this.serverUrl+ user.email +'/' + user.password , { headers: header });
+        console.log(this.serverUrl+ user.email +'/' + user.password + "/" + user.accessToken + "/android" )
+        return this.http.get(this.serverUrl+ user.email +'/' + user.password + "/" + user.accessToken + "/android"  , { headers: header });
     }
 
     logout() {
