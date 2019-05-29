@@ -2,48 +2,56 @@
 // Feel free to swap in your own service / APIs / etc here for your own apps.
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+import { isAndroid, isIOS } from "tns-core-modules/platform"
 
 // import { Kinvey } from "kinvey-nativescript-sdk";
 import { User } from "./user.model";
 
 @Injectable()
 export class UserService {
-    constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) { }
 
-     //private serverUrl = "http://192.168.0.4/solpe/login/ValidateUser/";
-    private serverUrl = "http://172.20.0.154:8081/login/ValidateUser/";
-    register(user: User) {
-        // return Kinvey.User.signup({ username: user.email, password: user.password })
-        //     .catch(this.handleErrors);
+  //private serverUrl = "http://192.168.0.4/solpe/login/ValidateUser/";
+  private serverUrl = "http://172.20.0.154:8081/login/ValidateUser/";
+  register(user: User) {
+    // return Kinvey.User.signup({ username: user.email, password: user.password })
+    //     .catch(this.handleErrors);
+  }
+
+  login(user: User) {
+    let header = this.createRequestHeader();
+    // verifica plataforma
+    let platform = "";
+    if (isAndroid) {
+      platform = "android"
+    } else if (isIOS) {
+      platform = "ios"
     }
+    console.log(this.serverUrl + user.email + '/' + user.password + "/" + user.accessToken + platform)
+    return this.http.get(this.serverUrl + user.email + '/' + user.password + "/" + user.accessToken + platform, { headers: header });
+  }
 
-    login(user: User) {
-        let header = this.createRequestHeader();
-        console.log(this.serverUrl+ user.email +'/' + user.password + "/" + user.accessToken + "/android" )
-        return this.http.get(this.serverUrl+ user.email +'/' + user.password + "/" + user.accessToken + "/android"  , { headers: header });
-    }
+  logout() {
+    // return Kinvey.User.logout()
+    //     .catch(this.handleErrors);
+  }
 
-    logout() {
-        // return Kinvey.User.logout()
-        //     .catch(this.handleErrors);
-    }
+  resetPassword(email) {
+    // return Kinvey.User.resetPassword(email)
+    //     .catch(this.handleErrors);
+  }
+  private createRequestHeader() {
+    // set headers here e.g.
+    let headers = new HttpHeaders({
+      "Content-Type": "application/json",
+      "Accept": "application/json",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, PUT, POST",
+      'X-TFS-FedAuthRedirect': 'Suppress'
+    });
 
-    resetPassword(email) {
-        // return Kinvey.User.resetPassword(email)
-        //     .catch(this.handleErrors);
-    }
-    private createRequestHeader() {
-        // set headers here e.g.
-        let headers = new HttpHeaders({
-            "Content-Type": "application/json",
-            "Accept": "application/json",
-            "Access-Control-Allow-Origin":"*",
-            "Access-Control-Allow-Methods":"GET, PUT, POST",
-            'X-TFS-FedAuthRedirect': 'Suppress'
-         });
+    return headers;
+  }
 
-        return headers;
-    }
 
-   
 }
