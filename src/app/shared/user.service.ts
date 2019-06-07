@@ -12,7 +12,7 @@ export class UserService {
   constructor(private http: HttpClient) { }
 
 //   private serverUrl = "http://192.168.0.6/solpe/login/ValidateUser/";
-  private serverUrl = "http://172.20.0.154:8081/login/ValidateUser/";
+  private serverUrl = "http://190.24.154.2:8081/login/ValidateUser/";
   register(user: User) {
     // return Kinvey.User.signup({ username: user.email, password: user.password })
     //     .catch(this.handleErrors);
@@ -27,7 +27,7 @@ export class UserService {
     } else if (isIOS) {
       platform = "ios"
     }
-    console.log(this.serverUrl + user.email + '/' + user.password + "/" + user.accessToken + platform)
+    console.log(this.serverUrl + user.email + '/' + user.password + "/" + user.accessToken +  "/" + platform)
     return this.http.get(this.serverUrl + user.email + '/' + user.password + "/" + user.accessToken +  "/" + platform, { headers: header });
   }
 

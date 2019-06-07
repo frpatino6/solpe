@@ -16,18 +16,18 @@ export class HomeService {
         
     }
 
-    private serverUrl = "http://172.20.0.154:8082/solpe/GetLiberaSolpes/";
-    private serverDatabaseUrl="http://172.20.0.154:8082/solpe/UpdateOrderState/"
+    private serverUrl = "http://190.24.154.2:8082/solpe/GetLiberaSolpes/";
+    private serverDatabaseUrl="http://190.24.154.2:8082/solpe/UpdateOrderState/"
 
     // private serverUrl = "http://192.168.0.6/solpeoracle/solpe/GetLiberaSolpes/";
     // private serverDatabaseUrl="http://192.168.0.6/solpeoracle/solpe/UpdateOrderState/"
 
     changesearchTaskCriteriak(searchText: string) {
-
         this.onChange.emit(searchText);
       }
     getOrders(user: String) : Observable<Orders[]>{
         let headers = this.createRequestHeader();
+        console.log(this.serverUrl  + user);
         return this.http.get<Orders[]>(this.serverUrl  + user, { headers: headers });
     }
     updateOrdersState(number: string) : Observable<Orders>{

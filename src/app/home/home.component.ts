@@ -118,8 +118,9 @@ export class HomeComponent implements OnInit {
 
                 this.ref.detectChanges();
             }, (error) => {
-                alert("Unfortunately we could not find your account." + error.message);
                 this.processing = false;
+                alert("Unfortunately we could not find your account." + error.message);
+                
             });
     }
 
