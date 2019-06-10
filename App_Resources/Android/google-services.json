@@ -25,15 +25,20 @@
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
-        },
-        "ads_service": {
-          "status": 2
+          "other_platform_oauth_client": [
+            {
+              "client_id": "994986165693-6fb1cfbcdi90oal2iuq8v0d6k49bkro8.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "994986165693-3q91g49qu55e12p9rpajtanvn1b6b82f.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.nativescript.solpercn"
+              }
+            }
+          ]
         }
       }
     }
