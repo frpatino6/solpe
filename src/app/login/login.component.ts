@@ -140,7 +140,10 @@ export class LoginComponent implements OnInit {
                 this.routerExtensions.navigate(["/home"],  navigationExtras);
             }, (error) => {
                 console.log(error.error)
-                alert(error.error);
+                var dialogs = require("tns-core-modules/ui/dialogs");
+                dialogs.alert(error.message).then(function() {
+                    console.log("Dialog closed!");
+                });
                 this.processing = false;
                 
             });
