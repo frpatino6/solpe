@@ -11,8 +11,8 @@ import { User } from "./user.model";
 export class UserService {
   constructor(private http: HttpClient) { }
 
-  //  private serverUrl = "http://192.168.0.5/solpe/login/ValidateUser/";
-  private serverUrl = "http://190.24.154.2:8081/login/ValidateUser/";
+  private serverUrl = "http://solpe.rcntv.com.co:8081/login/ValidateUser/";
+  // private serverUrl = "http://192.168.0.5/solpe/login/ValidateUser/";
   register(user: User) {
     // return Kinvey.User.signup({ username: user.email, password: user.password })
     //     .catch(this.handleErrors);

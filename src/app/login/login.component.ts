@@ -39,8 +39,8 @@ export class LoginComponent implements OnInit {
         });
         // this.user.email = "administrator";
         // this.user.password = "$S4ntiago12345"
-        this.user.email = "Jicastaneda";//"Jicastaneda";
-        this.user.password = "2019-jorlinluchjuan";//"jorlinluchjuan-2019"
+        this.user.email = "";//"Jicastaneda";
+        this.user.password = "";//"jorlinluchjuan-2019"
     }
     private pushSettings = {
         // Android settings
@@ -129,7 +129,7 @@ export class LoginComponent implements OnInit {
     login() {
         this.processing = true;
         this.user.accessToken=this._token
-        
+        this.user.password= this.user.password.replace("#","%23");
         this.userService.login(this.user)
             .subscribe((result) => {
                 this.processing = false;
@@ -139,9 +139,9 @@ export class LoginComponent implements OnInit {
                   }
                 this.routerExtensions.navigate(["/home"],  navigationExtras);
             }, (error) => {
-                console.log(error.error)
+                console.log(error)
                 var dialogs = require("tns-core-modules/ui/dialogs");
-                dialogs.alert(error.message).then(function() {
+                dialogs.alert(error.error).then(function() {
                     console.log("Dialog closed!");
                 });
                 this.processing = false;
