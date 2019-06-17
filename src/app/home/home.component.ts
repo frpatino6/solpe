@@ -56,6 +56,7 @@ export class HomeComponent implements OnInit {
         senderID: "984049361003", // Android: Required setting with the sender/project number
         notificationCallbackAndroid: (stringifiedData: String, fcmNotification: any) => {
             const notificationBody = fcmNotification && fcmNotification.getBody();
+              this.GetOrderByUser();
 
         },
 
