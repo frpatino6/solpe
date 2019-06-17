@@ -1,4 +1,4 @@
-<ActionBar title="Pedidos" class="action-bar">
+<ActionBar title="" class="action-bar">
 </ActionBar>
 
 <TabView id="tabViewContainer">
@@ -16,10 +16,12 @@
 									<Label row="0" col="0" text="SOL.PEDIDO:" horizontalAlignment="left"
 										class="label" />
 									<Label row="0" col="1" [text]="item.numero" class="body" />
-									<Label row="1" col="0" text="CANTIDAD:" horizontalAlignment="left" class="label" />
+									<Label row="1" col="0" text="CANTIDAD:" horizontalAlignment="left" class="label" />									
 									<Label row="1" col="1" [text]="item.cantidad" class="body" />
-									<Label row="2" col="0" text="VALOR:" horizontalAlignment="left" class="label" />
-									<Label row="2" col="1" [text]="item.valorLiteral" class="body" />
+									<Label row="2" col="0" text="POSICION:" horizontalAlignment="left" class="label" />
+									<Label row="2" col="1" [text]="item.posicion" class="body" />
+									<Label row="3" col="0" text="VALOR:" horizontalAlignment="left" class="label" />
+									<Label row="3" col="1" [text]="parseCurrencyFormat(item.valor)" class="body" />
 								</GridLayout>
 								<button text="Liberar" (tap)="onClick(item.numero)" row="2" col="1"
 									class="btn btn-primary" />

@@ -12,7 +12,11 @@ import * as _ from 'lodash';
 import { CurrencyPipe } from "@angular/common";
 
 require("nativescript-localstorage");
-
+const formatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 2
+  })
 
 registerElement('CardView', () => CardView);
 
@@ -56,7 +60,7 @@ export class HomeComponent implements OnInit {
         senderID: "984049361003", // Android: Required setting with the sender/project number
         notificationCallbackAndroid: (stringifiedData: String, fcmNotification: any) => {
             const notificationBody = fcmNotification && fcmNotification.getBody();
-              this.GetOrderByUser();
+            this.GetOrderByUser();
 
         },
 
@@ -92,12 +96,13 @@ export class HomeComponent implements OnInit {
     }
 
     GetOrderByUser() {
-        var self= this;
+        var self = this;
         this.processing = true;
         var email = localStorage.getItem('emailUser')
         this.homeServices.getOrders(email)
             .subscribe((result) => {
                 this.processing = false;
+                console.log()
                 self.dataSolpe = result.filter(type => type.tipo_Doc == "S");
                 self.dataPedidos = result.filter(type => type.tipo_Doc != "S");
                 self.dataGroupPedidos = _.chain(self.dataPedidos).groupBy("numero").map(function (v, i) {
@@ -112,16 +117,30 @@ export class HomeComponent implements OnInit {
 
                 }).value();
 
+                self.dataSolpe = _.chain(self.dataSolpe).groupBy("numero").map(function (v, i) {
+                    return {
+                        numero: i,
+                        id: _.get(_.find(v, 'numero'), 'numero'),
+                        cantidad: _.get(_.find(v, 'cantidad'), 'cantidad'),
+                        valorLiteral: _.get(_.find(v, 'valorLiteral'), 'valorLiteral'),
+                        posicion: _.get(_.find(v, 'posicion'), 'posicion'),
+                        valor: _.get(_.find(v, 'valor'), 'valor')
+                    };
+
+                }).value();
+
                 if (this.dataSolpe.length == 0 && this.dataPedidos.length == 0)
                     alert("No tienen pendiente pedidos por aprobar");
-                    
+                else
+                    console.log(self.dataGroupPedidos)
+
                 this.setTitleTabSolpe()
 
                 this.ref.detectChanges();
             }, (error) => {
                 this.processing = false;
                 alert("Unfortunately we could not find your account." + error.message);
-                
+
             });
     }
 
@@ -156,7 +175,7 @@ export class HomeComponent implements OnInit {
     }
     onClickDetailView(numeroPedido) {
 
-        this.processing=true;
+        this.processing = true;
         let navigationExtras = {
             queryParams: {
                 'pedidoDetails': JSON.stringify(this.dataPedidos.filter(e => e.numero == numeroPedido)),
@@ -178,5 +197,8 @@ export class HomeComponent implements OnInit {
             result += element.valor;
         });
         return this.currencyPipe.transform(result);
+    }
+    parseCurrencyFormat(value){
+        return this.currencyPipe.transform(value);
     }
 }
