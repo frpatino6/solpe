@@ -39,8 +39,8 @@ export class LoginComponent implements OnInit {
         });
         // this.user.email = "administrator";
         // this.user.password = "$S4ntiago12345"
-        this.user.email = "";//"Jicastaneda";
-        this.user.password = "";//"jorlinluchjuan-2019"
+        this.user.email = "Jicastaneda";
+        this.user.password ="2019-jorlinluchjuan"
     }
     private pushSettings = {
         // Android settings

@@ -19,7 +19,7 @@ export class DetailRequestComponent implements OnInit {
   public dataGroupPedidos: Orders[] = new Array();
   public processing = false;
   public numeroPedido = ""
-  public totalPedido=0;
+  public totalPedido = 0;
   constructor(
     private currencyPipe: CurrencyPipe,
     private router: RouterExtensions,
@@ -32,8 +32,7 @@ export class DetailRequestComponent implements OnInit {
     this.route.queryParams.subscribe(params => {
       self.dataPedidos = JSON.parse(params["pedidoDetails"]);
       self.dataGroupPedidos = JSON.parse(params["groupPedidoDetails"]);
-      self.totalPedido=params["totalPedido"];
-
+      self.totalPedido = params["totalPedido"];
       if (self.dataPedidos.length > 0)
         self.numeroPedido = self.dataPedidos[0].numero;
 
@@ -47,6 +46,9 @@ export class DetailRequestComponent implements OnInit {
   }
   ngOnInit() {
 
+  }
+  parseCurrencyFormat(value) {
+    return this.currencyPipe.transform(value);
   }
   onClick() {
     this.processing = true;

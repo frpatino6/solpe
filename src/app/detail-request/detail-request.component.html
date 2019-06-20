@@ -21,7 +21,7 @@
                 <Label [text]="dataitem.tipo_Doc" textWrap="true" row="0" col="0" class="td #"></Label>
                 <Label [text]="dataitem.texto" textWrap="true" row="0" col="1" class="td team"></Label>
                 <Label [text]="dataitem.cantidad" textWrap="true" row="0" col="2" class="td Z"></Label>
-                <Label text="{{dataitem.valorLiteral}}" textWrap="true" row="0" col="3" class="td V"></Label>
+                <Label [text]="parseCurrencyFormat(dataitem.valor)" textWrap="true" row="0" col="3" class="td V"></Label>
               </GridLayout>
             </ng-template>
           </ListView>
@@ -32,7 +32,6 @@
           <button row="1" col="1" text="Liberar" (tap)="onClick()" class="btn btn-primary"></button>
         </GridLayout>
       </StackLayout>
-
     </StackLayout>
     <ActivityIndicator rowSpan="2" [busy]="processing"></ActivityIndicator>
   </GridLayout>
