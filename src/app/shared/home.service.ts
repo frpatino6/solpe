@@ -16,7 +16,7 @@ export class HomeService {
         
     }
 
-    private serverUrl = "http://solpe.rcntv.com.co:8082/solpe/GetLiberaSolpes/";
+    private serverUrl = "http://solpe.rcntv.com.co:8082/solpe/solpe/SendNotifications/";
     private serverDatabaseUrl="http://solpe.rcntv.com.co:8082/solpe/UpdateOrderState/"
 
     // private serverUrl = "http://192.168.0.6/solpeoracle/solpe/GetLiberaSolpes/";

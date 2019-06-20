@@ -2,7 +2,7 @@
         <Image class="logo" src="~/app/images/rcn-tevision.png"></Image>    
         <GridLayout rows="auto, auto, auto">
             <StackLayout row="0" class="input-field">
-                <TextField class="input" hint="Email" [isEnabled]="!processing"
+                <TextField class="input" hint="Nomre usuario" [isEnabled]="!processing"
                     keyboardType="email" autocorrect="false"
                     autocapitalizationType="none" [(ngModel)]="user.email"
                     returnKeyType="next" (returnPress)="focusPassword()"></TextField>
@@ -10,7 +10,7 @@
             </StackLayout>
     
             <StackLayout row="1" class="input-field">
-                <TextField #password class="input" [isEnabled]="!processing" hint="Password"
+                <TextField #password class="input" [isEnabled]="!processing" hint="Contraseña"
                     secure="true" [(ngModel)]="user.password" [returnKeyType]="isLoggingIn ? 'done' : 'next'"
                     (returnPress)="focusConfirmPassword()"></TextField>
                 <StackLayout class="hr-light"></StackLayout>
