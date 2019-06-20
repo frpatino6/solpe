@@ -20,6 +20,8 @@ export class DetailRequestComponent implements OnInit {
   public processing = false;
   public numeroPedido = ""
   public totalPedido = 0;
+
+  
   constructor(
     private currencyPipe: CurrencyPipe,
     private router: RouterExtensions,

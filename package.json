@@ -24,6 +24,7 @@
     "nativescript-angular": "~7.2.1",
     "nativescript-bottom-navigation": "^1.5.0",
     "nativescript-cardview": "^3.1.1",
+    "nativescript-floatingactionbutton": "^5.0.3",
     "nativescript-localstorage": "^2.0.0",
     "nativescript-plugin-firebase": "^8.0.1",
     "nativescript-push-notifications": "^1.1.6",
