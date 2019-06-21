@@ -12,15 +12,14 @@ export class HomeService {
     public onChange: EventEmitter<string> = new EventEmitter<string>();
     
     constructor(private http: HttpClient) { 
-
         
     }
 
-    // private serverUrl = "http://solpe.rcntv.com.co:8082/solpe/SendNotifications/";
-    // private serverDatabaseUrl="http://solpe.rcntv.com.co:8082/solpe/UpdateOrderState/"
+    private serverUrl = "http://solpe.rcntv.com.co:8082/solpe/GetLiberaSolpes/";
+    private serverDatabaseUrl="http://solpe.rcntv.com.co:8082/solpe/UpdateOrderState/"
 
-    private serverUrl = "http://192.168.0.5/solpeoracle/solpe/GetLiberaSolpes/";
-    private serverDatabaseUrl="http://192.168.0.5/solpeoracle/solpe/UpdateOrderState/"
+    // private serverUrl = "http://192.168.0.5/solpeoracle/solpe/GetLiberaSolpes/";
+    // private serverDatabaseUrl="http://192.168.0.5/solpeoracle/solpe/UpdateOrderState/"
 
     changesearchTaskCriteriak(searchText: string) {
         this.onChange.emit(searchText);
