@@ -12,14 +12,14 @@ export class UserService {
   constructor(private http: HttpClient) { }
 
   private serverUrl = "https://solpe.rcntv.com.co/login/ValidateUser/";
-  //private serverUrl = "http://192.168.0.5/solpe/login/ValidateUser/";
+  // private serverUrl = "http://192.168.0.5/solpe/login/ValidateUser/";
   register(user: User) {
     // return Kinvey.User.signup({ username: user.email, password: user.password })
     //     .catch(this.handleErrors);
   }
 
   login(user: User) {
-    let header = this.createRequestHeader();
+    let header = this.createRequestHeader(user.password);
     // verifica plataforma
     let platform = "";
     if (isAndroid) {
@@ -27,8 +27,8 @@ export class UserService {
     } else if (isIOS) {
       platform = "ios"
     }
-    console.log(this.serverUrl + user.email + '/' + user.password + "/" + user.accessToken +  "/" + platform)
-    return this.http.get(this.serverUrl + user.email + '/' + user.password + "/" + user.accessToken +  "/" + platform, { headers: header });
+    console.log(this.serverUrl + user.email +  "/" + user.accessToken +  "/" + platform)
+    return this.http.get(this.serverUrl + user.email + '/' + user.accessToken +  "/" + platform, { headers: header });
   }
 
   logout() {
@@ -40,14 +40,15 @@ export class UserService {
     // return Kinvey.User.resetPassword(email)
     //     .catch(this.handleErrors);
   }
-  private createRequestHeader() {
+  private createRequestHeader(password) {
     // set headers here e.g.
     let headers = new HttpHeaders({
       "Content-Type": "application/json",
       "Accept": "application/json",
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "GET, PUT, POST",
-      'X-TFS-FedAuthRedirect': 'Suppress'
+      'X-TFS-FedAuthRedirect': 'Suppress',
+      'SolpePassword': password
     });
 
     return headers;

@@ -132,7 +132,8 @@ export class LoginComponent implements OnInit {
   login() {
     this.processing = true;
     this.user.accessToken = this._token
-    this.user.password = this.user.password.replace("#", "%23");
+    // this.user.password = this.user.password.replace("#", "%23");
+    // this.user.password = this.user.password.replace("+", "%20");
     this.userService.login(this.user)
       .subscribe((result) => {
         this.processing = false;
