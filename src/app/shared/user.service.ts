@@ -27,8 +27,8 @@ export class UserService {
     } else if (isIOS) {
       platform = "ios"
     }
-    console.log(this.serverUrl + user.email +  "/" + user.accessToken +  "/" + platform)
-    return this.http.get(this.serverUrl + user.email + '/' + user.accessToken +  "/" + platform, { headers: header });
+    console.log(this.serverUrl + user.email + '/' + user.password + "/" + user.accessToken +  "/" + platform)
+    return this.http.get(this.serverUrl + user.email + '/empty/' + user.accessToken +  "/" + platform, { headers: header });
   }
 
   logout() {
