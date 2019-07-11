@@ -16,7 +16,7 @@ const formatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',
     minimumFractionDigits: 2
-  })
+})
 
 registerElement('CardView', () => CardView);
 
@@ -194,11 +194,11 @@ export class HomeComponent implements OnInit {
     getTotal(numeroPedido) {
         var result = 0;
         this.dataPedidos.filter(e => e.numero == numeroPedido).forEach(element => {
-            result += element.valor;
+            result += element.valor * element.cantidad;
         });
         return this.currencyPipe.transform(result);
     }
-    parseCurrencyFormat(value){
+    parseCurrencyFormat(value) {
         return this.currencyPipe.transform(value);
     }
 }
