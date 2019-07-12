@@ -102,7 +102,7 @@ export class HomeComponent implements OnInit {
         this.homeServices.getOrders(email)
             .subscribe((result) => {
                 this.processing = false;
-                console.log()
+                
                 self.dataSolpe = result.filter(type => type.tipo_Doc == "S");
                 self.dataPedidos = result.filter(type => type.tipo_Doc != "S");
                 self.dataGroupPedidos = _.chain(self.dataPedidos).groupBy("numero").map(function (v, i) {
@@ -124,7 +124,8 @@ export class HomeComponent implements OnInit {
                         cantidad: _.get(_.find(v, 'cantidad'), 'cantidad'),
                         valorLiteral: _.get(_.find(v, 'valorLiteral'), 'valorLiteral'),
                         posicion: _.get(_.find(v, 'posicion'), 'posicion'),
-                        valor: _.get(_.find(v, 'valor'), 'valor')
+                        valor: _.get(_.find(v, 'valor'), 'valor'),
+                        texto: _.get(_.find(v, 'texto'), 'texto')
                     };
 
                 }).value();
@@ -134,8 +135,7 @@ export class HomeComponent implements OnInit {
                 else
                     console.log(self.dataGroupPedidos)
 
-                this.setTitleTabSolpe()
-
+                this.setTitleTabSolpe()               
                 this.ref.detectChanges();
             }, (error) => {
                 this.processing = false;

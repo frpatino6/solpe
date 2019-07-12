@@ -22,9 +22,9 @@
 }
 .label-title{
     font-weight: bold;
-    color: blue;
+    color: #ef5350;
     text-align: center;
-    font-size: 20px;
+    font-size: 18px;
 }
 .cardContent {
     padding: 20;
@@ -33,4 +33,11 @@
 }
 .body{
     font-size: 20px;
+}
+
+
+
+.my-button:active {
+    background-color: lightslategray;
+    color:white;
 }

@@ -28,9 +28,9 @@
           
           <Label row="2" col="0" text="TOTAL PEDIDO: {{totalPedido}}" textWrap="true" class="labelNumeroPedido"></Label>
         </GridLayout>
-        <GridLayout rows="*, *" columns="*, *" class="form">
-          <button row="1" col="0" text="Regresar" (tap)="onBack()" class="btn btn-primary"></button>
-          <button row="1" col="1" text="Liberar" (tap)="onClick()" class="btn btn-primary"></button>
+        <GridLayout columns="*,2*" rows="2*,3*" width="300"  >
+          <button row="1" col="0" text="Regresar" (tap)="onBack()" class="action-button-solpe"></button>
+          <button row="1" col="1" text="Liberar" (tap)="onClick()" class="action-button-solpe"></button>
         </GridLayout>
       </StackLayout>
     </StackLayout>

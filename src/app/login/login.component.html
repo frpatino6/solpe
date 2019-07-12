@@ -23,8 +23,8 @@
             </StackLayout>
             <ActivityIndicator rowSpan="3" [busy]="processing"></ActivityIndicator>
         </GridLayout>
-        <Button [text]="isLoggingIn ? 'Log In' : 'Sign Up'" [isEnabled]="!processing" (tap)="submit()"
-            class="btn btn-primary"></Button>
+        <Button [text]="isLoggingIn ? 'Ingresar' : 'Sign Up'" [isEnabled]="!processing" (tap)="submit()"
+            class="action-button-solpe"></Button>
     </StackLayout>
     <Label (tap)="toggleForm()">
         <FormattedString>
