@@ -55,7 +55,7 @@ export class DetailRequestComponent implements OnInit {
   onClick() {
     this.processing = true;
 
-    this.homeServices.updateOrdersState(this.numeroPedido)
+    this.homeServices.updatePedidoState(this.numeroPedido)
       .subscribe((result) => {
         this.processing = false;
         this.router.back();

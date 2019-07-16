@@ -30,6 +30,7 @@ export class HomeComponent implements OnInit {
     public dataSolpe: Orders[] = new Array();
     public dataPedidos: Orders[] = new Array();
     public dataGroupPedidos: Orders[] = new Array();
+    public dataGroupSolpes: Orders[] = new Array();
     public processing = false;
     private _token: String;
     private emailUser: String;
@@ -37,7 +38,7 @@ export class HomeComponent implements OnInit {
     public TitleTabPedidos;
     public totalSolpe = 0;
     public totalPedidos = 0
-
+    
     constructor(private page: Page, private homeServices: HomeService, private router: Router,
         private currencyPipe: CurrencyPipe,
         private route: ActivatedRoute, private routerExtensions: RouterExtensions,
@@ -74,7 +75,7 @@ export class HomeComponent implements OnInit {
         }
     };
     setTitleTabSolpe() {
-        this.totalSolpe = this.dataSolpe.length;
+        this.totalSolpe = this.dataGroupSolpes.length;
         this.totalPedidos = this.dataGroupPedidos.length;
         this.TitleTabSolpe = { title: "Solicitud de pedidos " + this.totalSolpe, iconSource: "res://solpe" };
         this.TitleTabPedidos = { title: "Pedidos " + this.totalPedidos, iconSource: "res://pedidos" };
@@ -117,7 +118,7 @@ export class HomeComponent implements OnInit {
 
                 }).value();
 
-                self.dataSolpe = _.chain(self.dataSolpe).groupBy("numero").map(function (v, i) {
+                self.dataGroupSolpes = _.chain(self.dataSolpe).groupBy("numero").map(function (v, i) {
                     return {
                         numero: i,
                         id: _.get(_.find(v, 'numero'), 'numero'),
@@ -144,9 +145,9 @@ export class HomeComponent implements OnInit {
             });
     }
 
-    onClick(number) {
+    onClick(number,pos) {
         this.processing = true;
-        this.homeServices.updateOrdersState(number)
+        this.homeServices.updateOrdersSolpe(number,pos)
             .subscribe((result) => {
                 this.processing = false;
                 this.GetOrderByUser();

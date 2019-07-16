@@ -23,7 +23,7 @@
 									<Label row="3" col="0" text="VALOR:" horizontalAlignment="left" class="label" />
 									<Label row="3" col="1" [text]="parseCurrencyFormat(item.valor)" class="body" />
 								</GridLayout>
-								<button text="Liberar" (tap)="onClick(item.numero)" row="2" col="1"
+								<button text="Liberar" (tap)="onClick(item.numero,item.posicion)" row="2" col="1"
 									class="action-button-solpe" />
 							</StackLayout>
 						</Card:CardView>

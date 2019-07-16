@@ -14,8 +14,7 @@ export class UserService {
   private serverUrl = "https://solpe.rcntv.com.co/login/ValidateUser/";
   // private serverUrl = "http://192.168.0.5/solpe/login/ValidateUser/";
   register(user: User) {
-    // return Kinvey.User.signup({ username: user.email, password: user.password })
-    //     .catch(this.handleErrors);
+    
   }
 
   login(user: User) {
@@ -27,7 +26,7 @@ export class UserService {
     } else if (isIOS) {
       platform = "ios"
     }
-    console.log(this.serverUrl + user.email + '/' + user.password + "/" + user.accessToken +  "/" + platform)
+   
     return this.http.get(this.serverUrl + user.email + '/empty/' + user.accessToken +  "/" + platform, { headers: header });
   }
 

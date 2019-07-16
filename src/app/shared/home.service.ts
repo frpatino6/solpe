@@ -10,27 +10,31 @@ import { Orders } from "./models/Orders";
 @Injectable()
 export class HomeService {
     public onChange: EventEmitter<string> = new EventEmitter<string>();
-    
-    constructor(private http: HttpClient) { 
-        
+
+    constructor(private http: HttpClient) {
+
     }
 
-    private serverUrl = "https://solpe.rcntv.com.co:444/solpe/GetLiberaSolpes/";
-    private serverDatabaseUrl="https://solpe.rcntv.com.co:444/solpe/UpdateOrderState/"
-    //  private serverUrl = "http://192.168.0.5/solpeoracle/solpe/GetLiberaSolpes/";
-    //  private serverDatabaseUrl="http://192.168.0.5/solpeoracle/solpe/UpdateOrderState/"
+    // private serverUrl = "https://solpe.rcntv.com.co:444/solpe/GetLiberaSolpes/";
+    // private serverDatabaseUrl = "https://solpe.rcntv.com.co:444/solpe/"
+    private serverUrl = "http://192.168.0.5/solpeoracle/solpe/GetLiberaSolpes/";
+    private serverDatabaseUrl = "http://192.168.0.5/solpeoracle/solpe/"
 
     changesearchTaskCriteriak(searchText: string) {
         this.onChange.emit(searchText);
-      }
-    getOrders(user: String) : Observable<Orders[]>{
-        let headers = this.createRequestHeader();
-        console.log(this.serverUrl  + user);
-        return this.http.get<Orders[]>(this.serverUrl  + user, { headers: headers });
     }
-    updateOrdersState(number: string) : Observable<Orders>{
+    getOrders(user: String): Observable<Orders[]> {
         let headers = this.createRequestHeader();
-        return this.http.post<Orders>(this.serverDatabaseUrl  + number, { headers: headers });
+        console.log(this.serverUrl + user);
+        return this.http.get<Orders[]>(this.serverUrl + user, { headers: headers });
+    }
+    updateOrdersSolpe(number: string, pos: number): Observable<Orders> {
+        let headers = this.createRequestHeader();
+        return this.http.post<Orders>(this.serverDatabaseUrl + "UpdateSolpeState/" + number + '/' + pos, { headers: headers });
+    }
+    updatePedidoState(number: string): Observable<Orders> {
+        let headers = this.createRequestHeader();
+        return this.http.post<Orders>(this.serverDatabaseUrl + 'UpdatePedidoState/' + number, { headers: headers });
     }
 
 
