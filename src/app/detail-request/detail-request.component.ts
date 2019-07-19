@@ -13,32 +13,6 @@ import {
 } from '@nstudio/nativescript-loading-indicator';
 
 const indicator = new LoadingIndicator();
-var message = String;
-const options: OptionsCommon = {
-  message: this.message,
-  details: '',
-  progress: 0.65,
-  margin: 10,
-  dimBackground: true,
-  color: '#4B9ED6', // color of indicator and labels
-  // background box around indicator
-  // hideBezel will override this if true
-  backgroundColor: 'yellow',
-  userInteractionEnabled: false, // default true. Set false so that the touches will fall through it.
-  hideBezel: true, // default false, can hide the surrounding bezel
-  mode: Mode.AnnularDeterminate, // see options below
-  android: {
-    // view: someStackLayout.android, // Target view to show on top of (Defaults to entire window)
-    cancelable: true,
-    cancelListener: function (dialog) {
-      console.log('Loading cancelled');
-    }
-  },
-  ios: {
-    // view: someButton.ios, // Target view to show on top of (Defaults to entire window)
-    square: false
-  }
-};
 
 @Component({
   moduleId: module.id,
