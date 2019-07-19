@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from "@angular/core";
+import { Component, OnInit, ChangeDetectorRef, OnDestroy } from "@angular/core";
 import firebase = require('nativescript-plugin-firebase')
 import * as pushPlugin from "nativescript-push-notifications";
 import { Page } from "tns-core-modules/ui/page/page";
@@ -6,11 +6,44 @@ import { registerElement } from 'nativescript-angular/element-registry';
 import { CardView } from 'nativescript-cardview';
 import { HomeService } from "../shared/home.service";
 import { Orders } from "../shared/models/Orders";
-import { ActivatedRoute, Router, NavigationEnd } from "@angular/router";
+import { ActivatedRoute, Router, NavigationEnd, NavigationStart } from "@angular/router";
 import { RouterExtensions } from "nativescript-angular/router";
 import * as _ from 'lodash';
 import { CurrencyPipe } from "@angular/common";
 
+import {
+    LoadingIndicator,
+    Mode,
+    OptionsCommon
+} from '@nstudio/nativescript-loading-indicator';
+
+const indicator = new LoadingIndicator();
+
+const options: OptionsCommon = {
+    message: 'Cargando Solpes y pedidos',
+    details: '',
+    progress: 0.65,
+    margin: 10,
+    dimBackground: true,
+    color: '#4B9ED6', // color of indicator and labels
+    // background box around indicator
+    // hideBezel will override this if true
+    backgroundColor: 'yellow',
+    userInteractionEnabled: false, // default true. Set false so that the touches will fall through it.
+    hideBezel: true, // default false, can hide the surrounding bezel
+    mode: Mode.AnnularDeterminate, // see options below
+    android: {
+        // view: someStackLayout.android, // Target view to show on top of (Defaults to entire window)
+        cancelable: false,
+        cancelListener: function (dialog) {
+            console.log('Loading cancelled');
+        }
+    },
+    ios: {
+        // view: someButton.ios, // Target view to show on top of (Defaults to entire window)
+        square: false
+    }
+};
 require("nativescript-localstorage");
 const formatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
@@ -26,19 +59,19 @@ registerElement('CardView', () => CardView);
     styleUrls: ['./home.component.css'],
     templateUrl: "./home.component.html"
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
+
     public dataSolpe: Orders[] = new Array();
     public dataPedidos: Orders[] = new Array();
     public dataGroupPedidos: Orders[] = new Array();
     public dataGroupSolpes: Orders[] = new Array();
-    public processing = false;
     private _token: String;
     private emailUser: String;
     public TitleTabSolpe;
     public TitleTabPedidos;
     public totalSolpe = 0;
     public totalPedidos = 0
-    
+
     constructor(private page: Page, private homeServices: HomeService, private router: Router,
         private currencyPipe: CurrencyPipe,
         private route: ActivatedRoute, private routerExtensions: RouterExtensions,
@@ -56,10 +89,18 @@ export class HomeComponent implements OnInit {
             self.GetOrderByUser();
         })
     }
+
+
     private pushSettings = {
         // Android settings
         senderID: "984049361003", // Android: Required setting with the sender/project number
         notificationCallbackAndroid: (stringifiedData: String, fcmNotification: any) => {
+            indicator.show({
+                message: 'Actualizando lista de pedidos...',
+                dimBackground: true,
+                hideBezel: true,
+                color: '#4B9ED6'
+            })
             const notificationBody = fcmNotification && fcmNotification.getBody();
             this.GetOrderByUser();
 
@@ -80,7 +121,14 @@ export class HomeComponent implements OnInit {
         this.TitleTabSolpe = { title: "Solicitud de pedidos " + this.totalSolpe, iconSource: "res://solpe" };
         this.TitleTabPedidos = { title: "Pedidos " + this.totalPedidos, iconSource: "res://pedidos" };
     }
+
+    ngOnDestroy(): void {
+
+
+    }
+
     ngOnInit(): void {
+
         firebase.addOnMessageReceivedCallback((message) => {
 
             this.GetOrderByUser();
@@ -92,18 +140,29 @@ export class HomeComponent implements OnInit {
                 alert("Error al recibir el mensaje: " + error);
             }
         );
+        this.router.events.subscribe(event => {
+            if (event instanceof NavigationStart) {
+                indicator.hide();
+            }
+        });
+
         this.setTitleTabSolpe();
 
     }
 
     GetOrderByUser() {
         var self = this;
-        this.processing = true;
+        indicator.show({
+            message: 'Cargando ordenes...',
+            dimBackground: true,
+            hideBezel: true,
+            color: '#4B9ED6'
+        });
         var email = localStorage.getItem('emailUser')
-        this.homeServices.getOrders('MSERNA')
+        this.homeServices.getOrders(email)
             .subscribe((result) => {
-                this.processing = false;
-                
+                indicator.hide();
+
                 self.dataSolpe = result.filter(type => type.tipo_Doc == "S");
                 self.dataPedidos = result.filter(type => type.tipo_Doc != "S");
                 self.dataGroupPedidos = _.chain(self.dataPedidos).groupBy("numero").map(function (v, i) {
@@ -138,25 +197,28 @@ export class HomeComponent implements OnInit {
                 else
                     console.log(self.dataGroupPedidos)
 
-                this.setTitleTabSolpe()               
+                this.setTitleTabSolpe()
                 this.ref.detectChanges();
             }, (error) => {
-                this.processing = false;
-                alert("Unfortunately we could not find your account." + error.message);
-
+                indicator.hide();
+                this.showMessageDialog(error.message)
             });
     }
 
-    onClick(number,pos) {
-        this.processing = true;
-        this.homeServices.updateOrdersSolpe(number,pos)
+    onClick(number, pos) {
+        indicator.show({
+            message: 'Actualizando estado del pedido seleccionado...',
+            dimBackground: true,
+            hideBezel: true,
+            color: '#4B9ED6'
+        });
+        this.homeServices.updateOrdersSolpe(number, pos)
             .subscribe((result) => {
-                this.processing = false;
                 this.GetOrderByUser();
             }, (error) => {
-
-                alert("Unfortunately we could not find your account." + error.message);
-                this.processing = false;
+                indicator.hide();
+                this.showMessageDialog(error.message)
+               
             });
     }
     onRegisterButtonTap() {
@@ -178,17 +240,39 @@ export class HomeComponent implements OnInit {
     }
     onClickDetailView(numeroPedido) {
 
-        this.processing = true;
         let navigationExtras = {
             queryParams: {
                 'pedidoDetails': JSON.stringify(this.dataPedidos.filter(e => e.numero == numeroPedido)),
                 'groupPedidoDetails': JSON.stringify(this.dataGroupPedidos.filter(e => e.numero == numeroPedido)),
                 'totalPedido': this.getTotal(numeroPedido)
-
             }
         }
+
         this.routerExtensions.navigate(["/detail"], navigationExtras);
+        // indicator.show({
+        //     message: 'Cargando detalle del pedido...',
+        //     dimBackground: true,
+        //     hideBezel: true,
+        //     color: '#4B9ED6'
+        // });
     }
+    onClickPedido(numero) {
+        indicator.show({
+            message: 'Actualizando estado del pedido seleccionado...',
+            dimBackground: true,
+            hideBezel: true,
+            color: '#4B9ED6'
+        });
+        this.homeServices.updatePedidoState(numero)
+            .subscribe((result) => {
+                indicator.hide();
+                this.GetOrderByUser();
+            }, (error) => {
+                indicator.hide();
+                this.showMessageDialog(error.message)                
+            });
+    }
+
     getLineas(numeroPedido) {
         let numLineas: number = this.dataPedidos.filter(e => e.numero == numeroPedido).length;
 
@@ -203,5 +287,16 @@ export class HomeComponent implements OnInit {
     }
     parseCurrencyFormat(value) {
         return this.currencyPipe.transform(value);
+    }
+
+    showMessageDialog(message) {
+        var dialogs = require("tns-core-modules/ui/dialogs");
+        dialogs.alert({
+            title: "Solpe",
+            message: message,
+            okButtonText: "Aceptar"
+        }).then(function () {
+            console.log("Dialog closed!");
+        });
     }
 }

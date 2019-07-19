@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild, OnInit } from "@angular/core";
+import { Component, ElementRef, ViewChild, OnInit, OnDestroy } from "@angular/core";
 import { alert, prompt } from "tns-core-modules/ui/dialogs";
 import { Page } from "tns-core-modules/ui/page";
 import { RouterExtensions } from "nativescript-angular/router";
@@ -6,7 +6,40 @@ import * as pushPlugin from "nativescript-push-notifications";
 import { User } from "../shared/user.model";
 import { UserService } from "../shared/user.service";
 import firebase = require('nativescript-plugin-firebase')
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router, NavigationStart } from "@angular/router";
+import {
+  LoadingIndicator,
+  Mode,
+  OptionsCommon
+} from '@nstudio/nativescript-loading-indicator';
+
+const indicator = new LoadingIndicator();
+
+const options: OptionsCommon = {
+  message: 'Verificando credenciales',
+  details: '',
+  progress: 0.65,
+  margin: 10,
+  dimBackground: true,
+  color: '#4B9ED6', // color of indicator and labels
+  // background box around indicator
+  // hideBezel will override this if true
+  backgroundColor: 'yellow',
+  userInteractionEnabled: true, // default true. Set false so that the touches will fall through it.
+  hideBezel: true, // default false, can hide the surrounding bezel
+  mode: Mode.Determinate,
+  android: {
+    // view: someStackLayout.android, // Target view to show on top of (Defaults to entire window)
+    cancelable: false,
+    cancelListener: function (dialog) {
+      console.log('Loading cancelled');
+    }
+  },
+  ios: {
+    // view: someButton.ios, // Target view to show on top of (Defaults to entire window)
+    square: false
+  }
+};
 require("nativescript-localstorage");
 
 @Component({
@@ -16,16 +49,18 @@ require("nativescript-localstorage");
   styleUrls: ['./login.component.css']
 })
 
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
+  ngOnDestroy(): void {
+    indicator.hide();
+  }
   private _message: string;
   private _token: String;
   private isLoggingIn = true;
   private user: User;
-  private processing = false;
   @ViewChild("password") password: ElementRef;
   @ViewChild("confirmPassword") confirmPassword: ElementRef;
 
-  constructor(private page: Page, private userService: UserService,
+  constructor(private page: Page, private userService: UserService, private router: Router,
     private activeRoute: ActivatedRoute,
     private routerExtensions: RouterExtensions) {
     this.page.actionBarHidden = true;
@@ -64,7 +99,11 @@ export class LoginComponent implements OnInit {
   };
 
   ngOnInit(): void {
-
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationStart) {
+        indicator.hide();
+      }
+    });
   }
 
   get message(): string {
@@ -121,7 +160,6 @@ export class LoginComponent implements OnInit {
       return;
     }
 
-    this.processing = true;
     if (this.isLoggingIn) {
       this.login();
     } else {
@@ -129,30 +167,28 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  login() {
-    this.processing = true;
+  login() {   
     this.user.accessToken = this._token
-    // this.user.password = this.user.password.replace("#", "%23");
-    // this.user.password = this.user.password.replace("+", "%20");
-    this.userService.login(this.user)
+    indicator.show({
+      message: 'Verificando credenciales...',
+      dimBackground: true,
+      hideBezel: true,
+      color: '#4B9ED6'
+
+    });
+
+    this.userService.login(this.user)   
       .subscribe((result) => {
-        this.processing = false;
         localStorage.setItem('emailUser', this.user.email);
         let navigationExtras = {
           queryParams: { 'email': this.user.email }
         }
         this.routerExtensions.navigate(["/home"], navigationExtras);
-      }, (error) => {
-        console.log(error)
-        var dialogs = require("tns-core-modules/ui/dialogs");
-        dialogs.alert(error.error).then(function () {
-          console.log("Dialog closed!");
-        });
-        this.processing = false;
-
+        indicator.hide();
+      }, (error) => {              
+        indicator.hide();
+        this.showMessageDialog(error.message)
       });
-
-
   }
 
   register() {
@@ -211,6 +247,15 @@ export class LoginComponent implements OnInit {
 
     }
   }
-
+  showMessageDialog(message) {
+    var dialogs = require("tns-core-modules/ui/dialogs");
+    dialogs.alert({
+        title: "Solpe",
+        message: message,
+        okButtonText: "Aceptar"
+    }).then(function () {
+        console.log("Dialog closed!");
+    });
+  }
 }
 

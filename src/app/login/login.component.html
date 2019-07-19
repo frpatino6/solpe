@@ -21,7 +21,7 @@
                     secure="true" [(ngModel)]="user.confirmPassword" returnKeyType="done"></TextField>
                 <StackLayout class="hr-light"></StackLayout>
             </StackLayout>
-            <ActivityIndicator rowSpan="3" [busy]="processing"></ActivityIndicator>
+            
         </GridLayout>
         <Button [text]="isLoggingIn ? 'Ingresar' : 'Sign Up'" [isEnabled]="!processing" (tap)="submit()"
             class="action-button-solpe"></Button>
