@@ -34,6 +34,8 @@ export class DetailRequestComponent implements OnInit {
     this.route.queryParams.subscribe(params => {
       self.dataPedidos = JSON.parse(params["pedidoDetails"]);
       self.dataGroupPedidos = JSON.parse(params["groupPedidoDetails"]);
+      console.log("Pedidos recibidos " + self.dataGroupPedidos[0])
+
       self.totalPedido = params["totalPedido"];
       if (self.dataPedidos.length > 0)
         self.numeroPedido = self.dataPedidos[0].numero;

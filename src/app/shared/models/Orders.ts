@@ -10,6 +10,7 @@ export class Orders {
     valor: number
     estado: string
     valorLiteral: string
+    destini:string;
     constructor() {
 
     }

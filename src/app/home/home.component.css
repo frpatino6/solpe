@@ -1,13 +1,13 @@
 .card {
     background-color: #fff;
     color: #4d4d4d;
-    margin: 15 15 0;
+    margin: 8 8 0;
 }
 .card-layout {
-    padding: 20;
+    padding: 10;
 }
 .card-layout .h1 {
-    margin-bottom: 15;
+    margin-bottom: 10;
 }
 .page {
     background-color: rgb(237, 237, 237);
@@ -24,7 +24,7 @@
     font-weight: bold;
     color: #ef5350;
     text-align: center;
-    font-size: 18px;
+    font-size: 14px;
 }
 .cardContent {
     padding: 20;
@@ -32,9 +32,11 @@
     font-size: 30;
 }
 .body{
-    font-size: 20px;
+    font-size: 16px;
 }
-
+.destino{
+    font-size: 14px;
+}
 
 
 .my-button:active {

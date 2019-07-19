@@ -100,7 +100,7 @@ export class HomeComponent implements OnInit {
         var self = this;
         this.processing = true;
         var email = localStorage.getItem('emailUser')
-        this.homeServices.getOrders(email)
+        this.homeServices.getOrders('MSERNA')
             .subscribe((result) => {
                 this.processing = false;
                 
@@ -113,7 +113,8 @@ export class HomeComponent implements OnInit {
                         cantidad: _.get(_.find(v, 'cantidad'), 'cantidad'),
                         valorLiteral: _.get(_.find(v, 'valorLiteral'), 'valorLiteral'),
                         tipo_Doc: _.get(_.find(v, 'tipo_Doc'), 'tipo_Doc'),
-                        texto: _.get(_.find(v, 'texto'), 'texto')
+                        texto: _.get(_.find(v, 'texto'), 'texto'),
+                        destino: _.get(_.find(v, 'destino'), 'destino')
                     };
 
                 }).value();
@@ -126,7 +127,8 @@ export class HomeComponent implements OnInit {
                         valorLiteral: _.get(_.find(v, 'valorLiteral'), 'valorLiteral'),
                         posicion: _.get(_.find(v, 'posicion'), 'posicion'),
                         valor: _.get(_.find(v, 'valor'), 'valor'),
-                        texto: _.get(_.find(v, 'texto'), 'texto')
+                        texto: _.get(_.find(v, 'texto'), 'texto'),
+                        destino: _.get(_.find(v, 'destino'), 'destino')
                     };
 
                 }).value();
