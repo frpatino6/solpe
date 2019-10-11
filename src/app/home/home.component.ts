@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef, OnDestroy } from "@angular/core";
-import firebase = require('nativescript-plugin-firebase')
+import * as firebase from 'nativescript-plugin-firebase';
 import * as pushPlugin from "nativescript-push-notifications";
 import { Page } from "tns-core-modules/ui/page/page";
 import { registerElement } from 'nativescript-angular/element-registry';
@@ -10,7 +10,10 @@ import { ActivatedRoute, Router, NavigationEnd, NavigationStart } from "@angular
 import { RouterExtensions } from "nativescript-angular/router";
 import * as _ from 'lodash';
 import { CurrencyPipe } from "@angular/common";
-
+registerElement(
+    "PullToRefresh",
+    () => require("@nstudio/nativescript-pulltorefresh").PullToRefresh
+);
 import {
     LoadingIndicator,
     Mode,
@@ -45,6 +48,7 @@ const options: OptionsCommon = {
     }
 };
 require("nativescript-localstorage");
+
 const formatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',
@@ -71,6 +75,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     public TitleTabPedidos;
     public totalSolpe = 0;
     public totalPedidos = 0
+    public pullRefresh;
 
     constructor(private page: Page, private homeServices: HomeService, private router: Router,
         private currencyPipe: CurrencyPipe,
@@ -90,7 +95,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         })
     }
 
-
+ 
     private pushSettings = {
         // Android settings
         senderID: "984049361003", // Android: Required setting with the sender/project number
@@ -173,7 +178,13 @@ export class HomeComponent implements OnInit, OnDestroy {
                         valorLiteral: _.get(_.find(v, 'valorLiteral'), 'valorLiteral'),
                         tipo_Doc: _.get(_.find(v, 'tipo_Doc'), 'tipo_Doc'),
                         texto: _.get(_.find(v, 'texto'), 'texto'),
-                        destino: _.get(_.find(v, 'destino'), 'destino')
+                        destino: _.get(_.find(v, 'destino'), 'destino'),
+                        mandante: _.get(_.find(v, 'mandante'), 'mandante'),
+                        usuario: _.get(_.find(v, 'usuario'), 'usuario'),
+                        posicion: _.get(_.find(v, 'posicion'), 'posicion'),
+                        valor: _.get(_.find(v, 'valor'), 'valor'),
+                        estado: _.get(_.find(v, 'estado'), 'estado'),
+                        proveedor: _.get(_.find(v, 'proveedor'), 'proveedor'),
                     };
 
                 }).value();
@@ -184,10 +195,15 @@ export class HomeComponent implements OnInit, OnDestroy {
                         id: _.get(_.find(v, 'numero'), 'numero'),
                         cantidad: _.get(_.find(v, 'cantidad'), 'cantidad'),
                         valorLiteral: _.get(_.find(v, 'valorLiteral'), 'valorLiteral'),
+                        tipo_Doc: _.get(_.find(v, 'tipo_Doc'), 'tipo_Doc'),
+                        texto: _.get(_.find(v, 'texto'), 'texto'),
+                        destino: _.get(_.find(v, 'destino'), 'destino'),
+                        mandante: _.get(_.find(v, 'mandante'), 'mandante'),
+                        usuario: _.get(_.find(v, 'usuario'), 'usuario'),
                         posicion: _.get(_.find(v, 'posicion'), 'posicion'),
                         valor: _.get(_.find(v, 'valor'), 'valor'),
-                        texto: _.get(_.find(v, 'texto'), 'texto'),
-                        destino: _.get(_.find(v, 'destino'), 'destino')
+                        estado: _.get(_.find(v, 'estado'), 'estado'),
+                        proveedor: _.get(_.find(v, 'proveedor'), 'proveedor')
                     };
 
                 }).value();
@@ -199,6 +215,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
                 this.setTitleTabSolpe()
                 this.ref.detectChanges();
+                this.pullRefresh.refreshing = false;
             }, (error) => {
                 indicator.hide();
                 this.showMessageDialog(error.message)
@@ -218,7 +235,7 @@ export class HomeComponent implements OnInit, OnDestroy {
             }, (error) => {
                 indicator.hide();
                 this.showMessageDialog(error.message)
-               
+
             });
     }
     onRegisterButtonTap() {
@@ -269,7 +286,7 @@ export class HomeComponent implements OnInit, OnDestroy {
                 this.GetOrderByUser();
             }, (error) => {
                 indicator.hide();
-                this.showMessageDialog(error.message)                
+                this.showMessageDialog(error.message)
             });
     }
 
@@ -298,5 +315,9 @@ export class HomeComponent implements OnInit, OnDestroy {
         }).then(function () {
             console.log("Dialog closed!");
         });
+    }
+    refreshListSolpe(args) {
+        this.pullRefresh = args.object;
+        this.GetOrderByUser();
     }
 }

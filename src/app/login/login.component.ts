@@ -2,11 +2,10 @@ import { Component, ElementRef, ViewChild, OnInit, OnDestroy } from "@angular/co
 import { alert, prompt } from "tns-core-modules/ui/dialogs";
 import { Page } from "tns-core-modules/ui/page";
 import { RouterExtensions } from "nativescript-angular/router";
-import * as pushPlugin from "nativescript-push-notifications";
 import { User } from "../shared/user.model";
 import { UserService } from "../shared/user.service";
-import firebase = require('nativescript-plugin-firebase')
 import { ActivatedRoute, Router, NavigationStart } from "@angular/router";
+import * as pushPlugin from 'nativescript-push-notifications';
 import {
   LoadingIndicator,
   Mode,
@@ -29,11 +28,11 @@ export class LoginComponent implements OnInit, OnDestroy {
     indicator.hide();
   }
   private _message: string;
-  private _token: String;
-  private isLoggingIn = true;
-  private user: User;
-  @ViewChild("password") password: ElementRef;
-  @ViewChild("confirmPassword") confirmPassword: ElementRef;
+  public _token: String;
+  public isLoggingIn = true;
+  public user: User;
+  @ViewChild("password",null) password: ElementRef;
+  @ViewChild("confirmPassword",null) confirmPassword: ElementRef;
 
   constructor(private page: Page, private userService: UserService, private router: Router,
     private activeRoute: ActivatedRoute,
@@ -42,18 +41,10 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.user = new User();
     this.onRegisterButtonTap();
 
-    firebase.getCurrentPushToken().then((token: string) => {
-      // may be null if not known yet
-      console.log(`Current push token: ${token}`);
-      this._token = token;
-    });
-    // this.user.email = "administrator";
-    // this.user.password = "$S4ntiago12345"
-    // this.user.email = "Jicastaneda"; // Jicastaneda
-    // this.user.password = "2019-jorlinluchjuan"; // 2019-jorlinluchjuan
+   
 
-    this.user.email = ""; 
-    this.user.password = ""; 
+    this.user.email = "frodriguezp"; 
+    this.user.password = "bogota1*"; 
   }
   private pushSettings = {
     // Android settings
