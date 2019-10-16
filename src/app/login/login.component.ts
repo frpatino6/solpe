@@ -109,7 +109,20 @@ export class LoginComponent implements OnInit, OnDestroy {
   }, err => {
     console.log("Failed to add addOnMessageReceivedCallback: " + err);
   });
-}
+  }
+
+  public doGetCurrentPushToken(): void {
+    messaging.getCurrentPushToken()
+        .then(token => {
+         this._token=token;
+          alert({
+            title: "Current Push Token",
+            message: (!token ? "Not received yet (note that on iOS this does not work on a simulator)" : token + ("\n\nSee the console log if you want to copy-paste it.")),
+            okButtonText: "OK, thx"
+          });
+        })
+        .catch(err => console.log("Error in doGetCurrentPushToken: " + err));
+  }
 
   ngOnInit(): void {
     this.router.events.subscribe(event => {
@@ -160,7 +173,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   login() {   
-    this.user.accessToken = this._token
+    this.user.accessToken = this._token;
     indicator.show({
       message: 'Verificando credenciales...',
       dimBackground: true,
