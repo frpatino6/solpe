@@ -5,13 +5,25 @@ import { RouterExtensions } from "nativescript-angular/router";
 import { User } from "../shared/user.model";
 import { UserService } from "../shared/user.service";
 import { ActivatedRoute, Router, NavigationStart } from "@angular/router";
-import * as firebase from 'nativescript-plugin-firebase';
+import { messaging, Message } from "nativescript-plugin-firebase/messaging";
+
 import {
   LoadingIndicator,
   Mode,
   OptionsCommon
 } from '@nstudio/nativescript-loading-indicator';
-
+const getCircularReplacer = () => {
+  const seen = new WeakSet;
+  return (key, value) => {
+    if (typeof value === "object" && value !== null) {
+      if (seen.has(value)) {
+        return;
+      }
+      seen.add(value);
+    }
+    return value;
+  };
+};
 const indicator = new LoadingIndicator();
 
 require("nativescript-localstorage");
@@ -40,6 +52,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.page.actionBarHidden = true;
     this.user = new User();
     this.onRegisterButtonTap();
+    this.doRegisterPushHandlers();
 
    
 
@@ -63,6 +76,40 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     }
   };
+
+
+   // You could add these handlers in 'init', but if you want you can do it seperately as well.
+  // The benefit being your user will not be confronted with the "Allow notifications" consent popup when 'init' runs.
+  public doRegisterPushHandlers(): void {
+    // note that this will implicitly register for push notifications, so there's no need to call 'registerForPushNotifications'
+    messaging.addOnPushTokenReceivedCallback(
+        token => {
+          // you can use this token to send to your own backend server,
+          // so you can send notifications to this specific device
+          console.log("Firebase plugin received a push token: " + token);
+          this._token=token;
+          // var pasteboard = utils.ios.getter(UIPasteboard, UIPasteboard.generalPasteboard);
+          // pasteboard.setValueForPasteboardType(token, kUTTypePlainText);
+        }
+    );
+    messaging.addOnMessageReceivedCallback(
+      message => {
+        console.log("Push message received in push-view-model: " + JSON.stringify(message, getCircularReplacer()));
+
+        setTimeout(() => {
+          alert({
+            title: "Push message!",
+            message: (message !== undefined && message.title !== undefined ? message.title : ""),
+            okButtonText: "Sw33t"
+          });
+        }, 500);
+      }
+  ).then(() => {
+    console.log("Added addOnMessageReceivedCallback");
+  }, err => {
+    console.log("Failed to add addOnMessageReceivedCallback: " + err);
+  });
+}
 
   ngOnInit(): void {
     this.router.events.subscribe(event => {
@@ -92,27 +139,12 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.isLoggingIn = !this.isLoggingIn;
   }
   onRegisterButtonTap() {
+    let self = this;
     
-    var self= this;
-    firebase.init({
-        persist: true,            
-        showNotificationsWhenInForeground: true,
-       
-        onPushTokenReceivedCallback: function (token) {
-          self._token = token;
-        }
-    }).then(
-        (instance) => {
-            console.log("firebase.init done "  );
-        },
-        (error) => {
-            console.log("firebase.init error: " + error);
-        }
-    );  
   }
   onUnregisterButtonTap() {
     let self = this;
-   
+    
   }
   submit() {
     if (!this.user.email || !this.user.password) {

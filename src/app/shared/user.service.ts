@@ -12,7 +12,7 @@ export class UserService {
   constructor(private http: HttpClient) { }
 
   // private serverUrl = "https://solpe.rcntv.com.co/login/ValidateUser/";
-  private serverUrl = "http://192.168.0.13/solpe/login/ValidateUser/";
+  private serverUrl = "http://192.168.0.6/solpe/login/ValidateUser/";
   register(user: User) {
     
   }
