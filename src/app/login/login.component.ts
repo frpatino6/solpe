@@ -5,7 +5,7 @@ import { RouterExtensions } from "nativescript-angular/router";
 import { User } from "../shared/user.model";
 import { UserService } from "../shared/user.service";
 import { ActivatedRoute, Router, NavigationStart } from "@angular/router";
-import * as pushPlugin from 'nativescript-push-notifications';
+import * as firebase from 'nativescript-plugin-firebase';
 import {
   LoadingIndicator,
   Mode,
@@ -31,8 +31,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   public _token: String;
   public isLoggingIn = true;
   public user: User;
-  @ViewChild("password",null) password: ElementRef;
-  @ViewChild("confirmPassword",null) confirmPassword: ElementRef;
+  @ViewChild("password", { static: true }) password: ElementRef;
+  @ViewChild("confirmPassword", { static: true }) confirmPassword: ElementRef;
 
   constructor(private page: Page, private userService: UserService, private router: Router,
     private activeRoute: ActivatedRoute,
@@ -92,33 +92,27 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.isLoggingIn = !this.isLoggingIn;
   }
   onRegisterButtonTap() {
-    let self = this;
-    pushPlugin.register(this.pushSettings, (token: String) => {
-      console.log("Device registered. Access token: " + token);
-      self._token = token;
-
-      if (pushPlugin.registerUserNotificationSettings) {
-        pushPlugin.registerUserNotificationSettings(() => {
-          console.log("Successfully registered for interactive push.");
-        }, (err) => {
-          console.log("Error registering for interactive push: " + JSON.stringify(err));
-        });
-      }
-    }, (errorMessage: String) => {
-      console.log(JSON.stringify(errorMessage));
-    });
+    
+    var self= this;
+    firebase.init({
+        persist: true,            
+        showNotificationsWhenInForeground: true,
+       
+        onPushTokenReceivedCallback: function (token) {
+          self._token = token;
+        }
+    }).then(
+        (instance) => {
+            console.log("firebase.init done "  );
+        },
+        (error) => {
+            console.log("firebase.init error: " + error);
+        }
+    );  
   }
   onUnregisterButtonTap() {
     let self = this;
-    pushPlugin.unregister(
-      (successMessage: String) => {
-        console.log(successMessage);
-      },
-      (errorMessage: String) => {
-        console.log(JSON.stringify(errorMessage));
-      },
-      this.pushSettings
-    );
+   
   }
   submit() {
     if (!this.user.email || !this.user.password) {

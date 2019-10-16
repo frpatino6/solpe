@@ -1,6 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef, OnDestroy } from "@angular/core";
 import * as firebase from 'nativescript-plugin-firebase';
-import * as pushPlugin from "nativescript-push-notifications";
 import { Page } from "tns-core-modules/ui/page/page";
 import { registerElement } from 'nativescript-angular/element-registry';
 import { CardView } from 'nativescript-cardview';
@@ -240,20 +239,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
     onRegisterButtonTap() {
         let self = this;
-        pushPlugin.register(this.pushSettings, (token: String) => {
-            // console.log("Device registered. Access token: " + token);
-            self._token = token;
-
-            if (pushPlugin.registerUserNotificationSettings) {
-                pushPlugin.registerUserNotificationSettings(() => {
-                    // console.log("Successfully registered for interactive push.");
-                }, (err) => {
-                    console.log("Error registering for interactive push: " + JSON.stringify(err));
-                });
-            }
-        }, (errorMessage: String) => {
-            console.log(JSON.stringify(errorMessage));
-        });
+       
     }
     onClickDetailView(numeroPedido) {
 
