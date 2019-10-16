@@ -94,31 +94,6 @@ export class HomeComponent implements OnInit, OnDestroy {
         })
     }
 
- 
-    private pushSettings = {
-        // Android settings
-        senderID: "984049361003", // Android: Required setting with the sender/project number
-        notificationCallbackAndroid: (stringifiedData: String, fcmNotification: any) => {
-            indicator.show({
-                message: 'Actualizando lista de pedidos...',
-                dimBackground: true,
-                hideBezel: true,
-                color: '#4B9ED6'
-            })
-            const notificationBody = fcmNotification && fcmNotification.getBody();
-            this.GetOrderByUser();
-
-        },
-
-        // iOS settings
-        badge: true, // Enable setting badge through Push Notification
-        sound: true, // Enable playing a sound
-        alert: true, // Enable creating a alert
-        notificationCallbackIOS: (message: any) => {
-
-            this.GetOrderByUser();
-        }
-    };
     setTitleTabSolpe() {
         this.totalSolpe = this.dataGroupSolpes.length;
         this.totalPedidos = this.dataGroupPedidos.length;
@@ -134,7 +109,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
 
         firebase.addOnMessageReceivedCallback((message) => {
-
+            this.pullRefresh.refreshing = false;
             this.GetOrderByUser();
         }).then(
             (instance) => {
@@ -214,7 +189,9 @@ export class HomeComponent implements OnInit, OnDestroy {
 
                 this.setTitleTabSolpe()
                 this.ref.detectChanges();
-                this.pullRefresh.refreshing = false;
+
+                if(this.pullRefresh!=undefined)
+                    this.pullRefresh.refreshing = false;
             }, (error) => {
                 indicator.hide();
                 this.showMessageDialog(error.message)

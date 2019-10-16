@@ -13,21 +13,21 @@ export class AppComponent implements OnInit {
     }
     constructor( private homeServices: HomeService){
        var self= this;
-        firebase.init({
-            persist: true,            
-            showNotificationsWhenInForeground: true,
+        // firebase.init({
+        //     persist: true,            
+        //     showNotificationsWhenInForeground: true,
            
-            onPushTokenReceivedCallback: function (token) {
-                //console.log("Firebase push token: " + token);
-            }
-        }).then(
-            (instance) => {
-                //console.log("firebase.init done "  );
-            },
-            (error) => {
-                //console.log("firebase.init error: " + error);
-            }
-        );
+        //     onPushTokenReceivedCallback: function (token) {
+        //         //console.log("Firebase push token: " + token);
+        //     }
+        // }).then(
+        //     (instance) => {
+        //         //console.log("firebase.init done "  );
+        //     },
+        //     (error) => {
+        //         //console.log("firebase.init error: " + error);
+        //     }
+        // );
         
     }
 }

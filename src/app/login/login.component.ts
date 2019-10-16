@@ -27,7 +27,7 @@ const getCircularReplacer = () => {
 const indicator = new LoadingIndicator();
 
 require("nativescript-localstorage");
-
+require("nativescript-plugin-firebase");
 @Component({
   selector: "app-login",
   moduleId: module.id,
@@ -87,7 +87,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         token => {
           // you can use this token to send to your own backend server,
           // so you can send notifications to this specific device
-          console.log("Firebase plugin received a push token: " + token);
+          console.log("Firebase plugin received a push token: " + JSON.stringify(token));
           this._token=token;
           // var pasteboard = utils.ios.getter(UIPasteboard, UIPasteboard.generalPasteboard);
           // pasteboard.setValueForPasteboardType(token, kUTTypePlainText);
@@ -116,12 +116,12 @@ export class LoginComponent implements OnInit, OnDestroy {
   public doGetCurrentPushToken(): void {
     messaging.getCurrentPushToken()
         .then(token => {
-         this._token=token;
-          alert({
-            title: "Current Push Token",
-            message: (!token ? "Not received yet (note that on iOS this does not work on a simulator)" : token + ("\n\nSee the console log if you want to copy-paste it.")),
-            okButtonText: "OK, thx"
-          });
+         this._token=JSON.stringify(token);
+          // alert({
+          //   title: "Current Push Token",
+          //   message: (!token ? "Not received yet (note that on iOS this does not work on a simulator)" : token + ("\n\nSee the console log if you want to copy-paste it.")),
+          //   okButtonText: "OK, thx"
+          // });
         })
         .catch(err => console.log("Error in doGetCurrentPushToken: " + err));
   }
@@ -129,7 +129,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   public doRegisterForPushNotifications(): void {
     messaging.registerForPushNotifications({
       onPushTokenReceivedCallback: (token: string): void => {
-        console.log(">>>> Firebase plugin received a push token: " + token);
+        console.log(">>>> Firebase plugin received a push token: " + JSON.stringify(token));
       },
 
       onMessageReceivedCallback: (message: Message) => {
@@ -204,6 +204,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   login() {   
+    this.doGetCurrentPushToken();
     this.user.accessToken = this._token;
     indicator.show({
       message: 'Verificando credenciales...',
