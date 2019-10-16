@@ -52,6 +52,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.page.actionBarHidden = true;
     this.user = new User();
     this.onRegisterButtonTap();
+    this.doRegisterForPushNotifications();
     this.doRegisterPushHandlers();
 
    
@@ -111,6 +112,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   });
   }
 
+
   public doGetCurrentPushToken(): void {
     messaging.getCurrentPushToken()
         .then(token => {
@@ -124,6 +126,35 @@ export class LoginComponent implements OnInit, OnDestroy {
         .catch(err => console.log("Error in doGetCurrentPushToken: " + err));
   }
 
+  public doRegisterForPushNotifications(): void {
+    messaging.registerForPushNotifications({
+      onPushTokenReceivedCallback: (token: string): void => {
+        console.log(">>>> Firebase plugin received a push token: " + token);
+      },
+
+      onMessageReceivedCallback: (message: Message) => {
+        console.log("Push message received in push-view-model: " + JSON.stringify(message, getCircularReplacer()));
+
+        setTimeout(() => {
+          alert({
+            title: "Push message!",
+            message: (message !== undefined && message.title !== undefined ? message.title : ""),
+            okButtonText: "Sw33t"
+          });
+        }, 500);
+      },
+
+      // Whether you want this plugin to automatically display the notifications or just notify the callback. Currently used on iOS only. Default true.
+      showNotifications: true,
+
+      // Whether you want this plugin to always handle the notifications when the app is in foreground.
+      // Currently used on iOS only. Default false.
+      // When false, you can still force showing it when the app is in the foreground by adding 'showWhenInForeground' to the notification as mentioned in the readme.
+      showNotificationsWhenInForeground: false
+    })
+        .then(() => console.log(">>>> Registered for push"))
+        .catch(err => console.log(">>>> Failed to register for push"));
+  }
   ngOnInit(): void {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationStart) {
