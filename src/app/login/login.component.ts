@@ -209,8 +209,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.user.accessToken = this._token;
     indicator.show({
       message: 'Verificando credenciales...',
-      dimBackground: true,
-      hideBezel: true,
+      dimBackground: false,
+      hideBezel: false,
       color: '#4B9ED6'
 
     });
