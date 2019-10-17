@@ -3,7 +3,6 @@ import { platformNativeScriptDynamic } from "nativescript-angular/platform";
 
 import { AppModule } from "./app/app.module";
 import { enableProdMode } from "@angular/core";
-require("nativescript-plugin-firebase");
 
 enableProdMode();
 platformNativeScriptDynamic().bootstrapModule(AppModule);
