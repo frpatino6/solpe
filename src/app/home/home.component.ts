@@ -109,7 +109,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
 
         firebase.addOnMessageReceivedCallback((message) => {
-            this.pullRefresh.refreshing = false;
+            if(this.pullRefresh!=undefined)
+                this.pullRefresh.refreshing = false;
             this.GetOrderByUser();
         }).then(
             (instance) => {
