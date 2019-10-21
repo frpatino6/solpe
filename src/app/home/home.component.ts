@@ -32,7 +32,7 @@ const options: OptionsCommon = {
     // hideBezel will override this if true
     backgroundColor: 'yellow',
     userInteractionEnabled: false, // default true. Set false so that the touches will fall through it.
-    hideBezel: true, // default false, can hide the surrounding bezel
+    hideBezel: false, // default false, can hide the surrounding bezel
     mode: Mode.AnnularDeterminate, // see options below
     android: {
         // view: someStackLayout.android, // Target view to show on top of (Defaults to entire window)
@@ -132,12 +132,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     GetOrderByUser() {
         var self = this;
-        indicator.show({
-            message: 'Cargando ordenes...',
-            dimBackground: true,
-            hideBezel: true,
-            color: '#4B9ED6'
-        });
+        indicator.show(options);
         var email = localStorage.getItem('emailUser')
         this.homeServices.getOrders(email)
             .subscribe((result) => {
