@@ -165,11 +165,11 @@ export class LoginComponent implements OnInit, OnDestroy {
         console.log("Push message received in push-view-model: " + JSON.stringify(message, getCircularReplacer()));
 
         setTimeout(() => {
-          alert({
-            title: "Push message!",
-            message: (message !== undefined && message.title !== undefined ? message.title : ""),
-            okButtonText: "Sw33t"
-          });
+          // alert({
+          //   title: "Push message!",
+          //   message: (message !== undefined && message.title !== undefined ? message.title : ""),
+          //   okButtonText: "Sw33t"
+          // });
         }, 500);
       },
 
@@ -257,15 +257,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       return;
     }
     this.userService.register(this.user)
-    // .then(() => {
-    //     this.processing = false;
-    //     this.alert("Your account was successfully created.");
-    //     this.isLoggingIn = true;
-    // })
-    // .catch(() => {
-    //     this.processing = false;
-    //     this.alert("Unfortunately we were unable to create your account.");
-    // });
+    
   }
 
   forgotPassword() {
@@ -279,11 +271,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     }).then((data) => {
       if (data.result) {
         this.userService.resetPassword(data.text.trim())
-        // .then(() => {
-        //     this.alert("Your password was successfully reset. Please check your email for instructions on choosing a new password.");
-        // }).catch(() => {
-        //     this.alert("Unfortunately, an error occurred resetting your password.");
-        // });
+       
       }
     });
   }
