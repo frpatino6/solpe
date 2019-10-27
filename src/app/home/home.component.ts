@@ -30,7 +30,6 @@ const options: OptionsCommon = {
     color: '#4B9ED6', // color of indicator and labels
     // background box around indicator
     // hideBezel will override this if true
-    backgroundColor: 'yellow',
     userInteractionEnabled: false, // default true. Set false so that the touches will fall through it.
     hideBezel: false, // default false, can hide the surrounding bezel
     mode: Mode.AnnularDeterminate, // see options below
