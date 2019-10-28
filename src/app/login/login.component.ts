@@ -25,8 +25,8 @@ const getCircularReplacer = () => {
   };
 };
 const options: OptionsCommon = {
-  message: 'Loading...',
-  details: 'Additional detail note!',
+  message: 'Autenticación...',
+  details: 'Validando usuario en directorio activo!',
   progress: 0.65,
   margin: 10,
   dimBackground: true,
