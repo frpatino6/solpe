@@ -25,15 +25,14 @@ const getCircularReplacer = () => {
   };
 };
 const options: OptionsCommon = {
-  message: 'Autenticación...',
-  details: 'Validando usuario en directorio activo!',
+  message: 'Autenticando...',  
   progress: 0.65,
   margin: 10,
   dimBackground: true,
   color: '#4B9ED6', // color of indicator and labels
   // background box around indicator
   // hideBezel will override this if true
-  backgroundColor: 'transparent',
+  backgroundColor: 'yellow',
   userInteractionEnabled: false, // default true. Set false so that the touches will fall through it.
   hideBezel: true, // default false, can hide the surrounding bezel
   mode: Mode.AnnularDeterminate, // see options below
@@ -45,10 +44,11 @@ const options: OptionsCommon = {
     }
   },
   ios: {
-  
+    
     square: false
   }
 };
+
 
 const indicator = new LoadingIndicator();
 
@@ -82,33 +82,13 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.doRegisterPushHandlers();
 
    
-    this.user.email = ""; 
-    this.user.password = ""; 
-
-    /*this.user.email = "frodriguezp"; 
-    this.user.password = "bogota1*"; */
+    //this.user.email = ""; 
+    //this.user.password = ""; 
+     this.user.email = "frodriguezp"; 
+     this.user.password = "bogota1*";
   }
-  private pushSettings = {
-    // Android settings
-    senderID: "984049361003", // Android: Required setting with the sender/project number
-    notificationCallbackAndroid: (stringifiedData: String, fcmNotification: any) => {
-      const notificationBody = fcmNotification && fcmNotification.getBody();
-      console.log("Message received!\n" + notificationBody + "\n" + stringifiedData);
-    },
-
-    // iOS settings
-    badge: true, // Enable setting badge through Push Notification
-    sound: true, // Enable playing a sound
-    alert: true, // Enable creating a alert
-    notificationCallbackIOS: (message: any) => {
-      console.log("Message received!\n" + JSON.stringify(message));
-
-    }
-  };
 
 
-   // You could add these handlers in 'init', but if you want you can do it seperately as well.
-  // The benefit being your user will not be confronted with the "Allow notifications" consent popup when 'init' runs.
   public doRegisterPushHandlers(): void {
     // note that this will implicitly register for push notifications, so there's no need to call 'registerForPushNotifications'
     messaging.addOnPushTokenReceivedCallback(
@@ -165,11 +145,11 @@ export class LoginComponent implements OnInit, OnDestroy {
         console.log("Push message received in push-view-model: " + JSON.stringify(message, getCircularReplacer()));
 
         setTimeout(() => {
-          // alert({
-          //   title: "Push message!",
-          //   message: (message !== undefined && message.title !== undefined ? message.title : ""),
-          //   okButtonText: "Sw33t"
-          // });
+          alert({
+            title: "Push message!",
+            message: (message !== undefined && message.title !== undefined ? message.title : ""),
+            okButtonText: "Sw33t"
+          });
         }, 500);
       },
 
@@ -247,7 +227,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         indicator.hide();
       }, (error) => {              
         indicator.hide();
-        this.showMessageDialog(error.error)
+        this.showMessageDialog(error.message)
       });
   }
 
@@ -257,7 +237,15 @@ export class LoginComponent implements OnInit, OnDestroy {
       return;
     }
     this.userService.register(this.user)
-    
+    // .then(() => {
+    //     this.processing = false;
+    //     this.alert("Your account was successfully created.");
+    //     this.isLoggingIn = true;
+    // })
+    // .catch(() => {
+    //     this.processing = false;
+    //     this.alert("Unfortunately we were unable to create your account.");
+    // });
   }
 
   forgotPassword() {
@@ -271,7 +259,11 @@ export class LoginComponent implements OnInit, OnDestroy {
     }).then((data) => {
       if (data.result) {
         this.userService.resetPassword(data.text.trim())
-       
+        // .then(() => {
+        //     this.alert("Your password was successfully reset. Please check your email for instructions on choosing a new password.");
+        // }).catch(() => {
+        //     this.alert("Unfortunately, an error occurred resetting your password.");
+        // });
       }
     });
   }
